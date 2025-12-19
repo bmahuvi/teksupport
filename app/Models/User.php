@@ -3,25 +3,20 @@
 namespace App\Models;
 
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
+use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
+use Illuminate\Support\Str;
+use Spatie\Permission\Traits\HasRoles;
 
 class User extends Authenticatable
 {
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
+    /** @use HasFactory<UserFactory> */
+    use HasFactory, Notifiable,HasRoles;
 
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
-    protected $fillable = [
-        'name',
-        'email',
-        'password',
-    ];
+   protected $guarded=['id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -33,6 +28,20 @@ class User extends Authenticatable
         'remember_token',
     ];
 
+    protected static function booted(): void
+    {
+        static::creating(function ($user) {
+            if (empty($user->ulid)) {
+                $user->ulid = (string) Str::ulid();
+            }
+        });
+    }
+
+    public function UserLastLogins(): HasMany
+    {
+        return $this->hasMany(UserLastLogin::class);
+    }
+
     /**
      * Get the attributes that should be cast.
      *
@@ -42,7 +51,10 @@ class User extends Authenticatable
     {
         return [
             'email_verified_at' => 'datetime',
+            'last_password_change' => 'datetime',
             'password' => 'hashed',
+            'change_password'=>'boolean',
+            'login_attempts'=>'integer'
         ];
     }
 }
