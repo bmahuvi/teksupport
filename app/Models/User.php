@@ -42,6 +42,11 @@ class User extends Authenticatable
         return $this->hasMany(UserLastLogin::class);
     }
 
+    public function tickets(): HasMany
+    {
+        return $this->hasMany(Ticket::class,'created_by','id');
+    }
+
     /**
      * Get the attributes that should be cast.
      *
