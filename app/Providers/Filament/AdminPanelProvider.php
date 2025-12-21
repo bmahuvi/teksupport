@@ -29,18 +29,18 @@ class AdminPanelProvider extends PanelProvider
             ->id('admin')
             ->path('admin')
             ->login()
+            ->topbar(true)
             ->authGuard('web')
             ->registration()
             ->passwordReset()
             ->emailVerification()
-//            ->strictAuthorization()
             ->databaseNotifications()
             ->font('Inter')
             ->breadcrumbs(false)
             ->spa()
             ->sidebarCollapsibleOnDesktop()
             ->colors([
-                'primary' => Color::Blue,
+                'primary' => Color::Emerald,
             ])
             ->favicon(asset('favicon.ico'))
             ->brandName('TekSupport')
