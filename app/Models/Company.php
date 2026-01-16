@@ -5,10 +5,13 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\SoftDeletes;
 
 class Company extends Model
 {
-    protected $guarded=['id'];
+    use SoftDeletes;
+
+    protected $guarded = ['id'];
 
     public function region(): BelongsTo
     {
@@ -20,13 +23,19 @@ class Company extends Model
         return $this->belongsTo(District::class);
     }
 
-    public function createdBy(): BelongsTo
+    public function creator(): BelongsTo
     {
-        return $this->belongsTo(User::class,'created_by');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
     }
+
+    public function users(): HasMany
+    {
+        return $this->hasMany(User::class);
+    }
+    
 }

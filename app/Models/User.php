@@ -5,6 +5,7 @@ namespace App\Models;
 // use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Database\Factories\UserFactory;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
@@ -14,9 +15,9 @@ use Spatie\Permission\Traits\HasRoles;
 class User extends Authenticatable
 {
     /** @use HasFactory<UserFactory> */
-    use HasFactory, Notifiable,HasRoles;
+    use HasFactory, Notifiable, HasRoles;
 
-   protected $guarded=['id'];
+    protected $guarded = ['id'];
 
     /**
      * The attributes that should be hidden for serialization.
@@ -32,7 +33,7 @@ class User extends Authenticatable
     {
         static::creating(function ($user) {
             if (empty($user->ulid)) {
-                $user->ulid = (string) Str::ulid();
+                $user->ulid = (string)Str::ulid();
             }
         });
     }
@@ -44,7 +45,12 @@ class User extends Authenticatable
 
     public function tickets(): HasMany
     {
-        return $this->hasMany(Ticket::class,'created_by','id');
+        return $this->hasMany(Ticket::class, 'created_by', 'id');
+    }
+
+    public function company(): BelongsTo
+    {
+        return $this->belongsTo(Company::class);
     }
 
     /**
@@ -58,8 +64,9 @@ class User extends Authenticatable
             'email_verified_at' => 'datetime',
             'last_password_change' => 'datetime',
             'password' => 'hashed',
-            'change_password'=>'boolean',
-            'login_attempts'=>'integer'
+            'change_password' => 'boolean',
+            'login_attempts' => 'integer',
+            'status' => 'integer',
         ];
     }
 }

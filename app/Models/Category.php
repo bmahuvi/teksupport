@@ -7,10 +7,18 @@ use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Category extends Model
 {
-    protected $guarded=['id'];
+    protected $guarded = ['id'];
 
     public function tickets(): HasMany
     {
         return $this->hasMany(Ticket::class);
+    }
+
+    protected function casts(): array
+    {
+        return [
+            'requires_approval' => 'boolean',
+            'is_active' => 'boolean',
+        ];
     }
 }

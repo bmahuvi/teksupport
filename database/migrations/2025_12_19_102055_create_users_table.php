@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -19,7 +18,7 @@ return new class extends Migration
             $table->string('phone')->unique()->nullable();
             $table->timestamp('email_verified_at')->nullable();
             $table->string('password');
-            $table->enum('status',['Active','Blocked','Inactive']);
+            $table->tinyInteger('status')->default(0);// 1 Active, 2 Blocked 0 Inactive
             $table->boolean('change_password')->default(false);
             $table->timestamp('last_password_change')->nullable();
             $table->smallInteger('login_attempts')->default(0);
