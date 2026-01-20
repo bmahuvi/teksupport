@@ -77,4 +77,9 @@ class TicketPolicy
         return $authUser->can('ChangePriority:Ticket');
     }
 
+    public function assign(AuthUser $authUser, Ticket $ticket): bool
+    {
+        return $authUser->can('Assign:Ticket');
+    }
+
 }

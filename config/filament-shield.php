@@ -186,6 +186,7 @@ return [
                 // custom permission
                 'changeStatus',
                 'changePriority',
+                'assign'
             ],
 
         ],

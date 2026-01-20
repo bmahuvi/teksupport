@@ -23,7 +23,16 @@ class TicketObserver
      */
     public function updated(Ticket $ticket): void
     {
-        //
+        if ($ticket->wasChanged('priority')) {
+            $oldPriority = $ticket->getOriginal('priority');
+            $newPriority = $ticket->priority;
+
+            info(sprintf(
+                'Priority changed from %s to %s',
+                $oldPriority->value,
+                $newPriority->value
+            ));
+        }
     }
 
     /**

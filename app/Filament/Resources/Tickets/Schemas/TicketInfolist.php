@@ -16,7 +16,12 @@ class TicketInfolist
                 TextEntry::make('slug')
                     ->placeholder('-'),
                 TextEntry::make('ticket_number'),
-                TextEntry::make('createdBy.name'),
+                
+                TextEntry::make('createdBy.name')
+                    ->label('Created by'),
+
+                TextEntry::make('assignedTo.name')
+                    ->label('Assigned to'),
 
                 TextEntry::make('category.name')
                     ->label('Category')
