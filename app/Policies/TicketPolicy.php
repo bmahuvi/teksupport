@@ -67,4 +67,14 @@ class TicketPolicy
         return $authUser->can('Reorder:Ticket');
     }
 
+    public function changeStatus(AuthUser $authUser, Ticket $ticket): bool
+    {
+        return $authUser->can('ChangeStatus:Ticket');
+    }
+
+    public function changePriority(AuthUser $authUser, Ticket $ticket): bool
+    {
+        return $authUser->can('ChangePriority:Ticket');
+    }
+
 }

@@ -3,9 +3,9 @@
 namespace App\Filament\Resources\Tickets\Pages;
 
 use App\Filament\Resources\Tickets\TicketResource;
-use App\Models\Category;
 use Filament\Resources\Pages\CreateRecord;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 
 class CreateTicket extends CreateRecord
 {
@@ -19,18 +19,7 @@ class CreateTicket extends CreateRecord
         $data['created_by'] = $user->id;
         $data['company_id'] = $user->company_id;
         $data['to_main'] = (bool)$user->company?->is_main;
-
-        if (!empty($data['category_id'])) {
-            $data['requires_approval'] = Category::whereKey($data['category_id'])
-                ->value('requires_approval') ?? false;
-
-            $data['status'] = $data['requires_approval']
-                ? 'Waiting Approval'
-                : 'New';
-        } else {
-            $data['requires_approval'] = false;
-            $data['status'] = 'New';
-        }
+        $data['ticket_ulid'] = Str::ulid();
 
         return $data;
     }

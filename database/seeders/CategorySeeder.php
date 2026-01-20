@@ -14,7 +14,7 @@ class CategorySeeder extends Seeder
     {
         Category::create([
             'name' => 'Change Request',
-            'initial' => 'CR-',
+            'initial' => 'CR',
             'slug' => 'change-request',
             'description' => 'Change Request',
             'requires_approval' => true,
@@ -22,21 +22,21 @@ class CategorySeeder extends Seeder
 
         Category::create([
             'name' => 'Incident',
-            'initial' => 'INC-',
+            'initial' => 'INC',
             'slug' => 'incident',
             'description' => 'Incident',
         ]);
 
         Category::create([
             'name' => 'Training',
-            'initial' => 'TR-',
+            'initial' => 'TR',
             'slug' => 'training',
             'description' => 'Training',
         ]);
 
         Category::create([
             'name' => 'New Feature Request',
-            'initial' => 'FR-',
+            'initial' => 'FR',
             'slug' => 'new-feature-request',
             'description' => 'New Feature Request',
             'requires_approval' => true,

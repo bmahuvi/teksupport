@@ -2,6 +2,8 @@
 
 declare(strict_types=1);
 
+use App\Filament\Resources\Tickets\TicketResource;
+
 return [
 
     /*
@@ -172,6 +174,20 @@ return [
                 'update',
                 'delete',
             ],
+            TicketResource::class => [
+                'viewAny',
+                'view',
+                'create',
+                'update',
+                'delete',
+                'restore',
+                'forceDelete',
+
+                // custom permission
+                'changeStatus',
+                'changePriority',
+            ],
+
         ],
         'exclude' => [
             //

@@ -4,8 +4,7 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
@@ -15,8 +14,11 @@ return new class extends Migration
             $table->id();
             $table->foreignId('ticket_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('status',['New','Update'])->default('New');
+            $table->enum('status', ['New', 'Update'])->default('New');
             $table->longText('comment');
+            $table->boolean('is_opened')->default(false);
+            $table->foreignId('opened_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->timestamp('opened_at')->nullable();
             $table->timestamps();
         });
     }

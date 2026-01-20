@@ -16,9 +16,8 @@ class TicketInfolist
                 TextEntry::make('slug')
                     ->placeholder('-'),
                 TextEntry::make('ticket_number'),
-                TextEntry::make('created_by')
-                    ->numeric()
-                    ->placeholder('-'),
+                TextEntry::make('createdBy.name'),
+
                 TextEntry::make('category.name')
                     ->label('Category')
                     ->placeholder('-'),
@@ -27,8 +26,25 @@ class TicketInfolist
                 TextEntry::make('company.name')
                     ->label('Company')
                     ->placeholder('-'),
-                TextEntry::make('status')
-                    ->badge(),
+                TextEntry::make('ticketStatus.name')
+                    ->label('Status')
+                    ->formatStateUsing(fn($record) => $record->ticketStatus?->name ?
+                        "<span style='
+                                display: inline-flex;
+                                align-items: center;
+                                background-color: {$record->ticketStatus->color}10;
+                                color: {$record->ticketStatus->color};
+                                padding: 0.3rem 0.8rem;
+                                border-radius: 9999px;
+                                font-size: 0.7rem;
+                                font-weight: 600;
+                                line-height: 1;
+                                border: 1.5px solid {$record->ticketStatus->color};
+                                white-space: nowrap;
+                            '>{$record->ticketStatus->name}</span>"
+                        : ''
+                    )
+                    ->html(),
                 IconEntry::make('requires_approval')
                     ->boolean(),
                 IconEntry::make('has_deadline')

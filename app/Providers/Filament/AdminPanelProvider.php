@@ -42,7 +42,7 @@ class AdminPanelProvider extends PanelProvider
             ->font('Inter')
             ->spa()
             ->defaultThemeMode(ThemeMode::System)
-            ->unsavedChangesAlerts()
+            ->unsavedChangesAlerts(app()->environment('production'))
             ->subNavigationPosition(SubNavigationPosition::Top)
             ->sidebarCollapsibleOnDesktop()
             ->collapsibleNavigationGroups()

@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Tickets;
 
+use App\Enums\NavigationGroups;
 use App\Filament\Resources\Tickets\Pages\CreateTicket;
 use App\Filament\Resources\Tickets\Pages\EditTicket;
 use App\Filament\Resources\Tickets\Pages\ListTickets;
@@ -15,6 +16,7 @@ use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
+use UnitEnum;
 
 class TicketResource extends Resource
 {
@@ -22,7 +24,8 @@ class TicketResource extends Resource
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTicket;
     protected static ?string $label = 'Ticket';
-    protected static ?int $navigationSort = 2;
+    protected static string|UnitEnum|null $navigationGroup = NavigationGroups::TICKETS->value;
+    protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema
     {
@@ -55,4 +58,5 @@ class TicketResource extends Resource
             'edit' => EditTicket::route('/{record}/edit'),
         ];
     }
+    
 }
