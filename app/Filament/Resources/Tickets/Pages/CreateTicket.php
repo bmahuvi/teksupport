@@ -20,6 +20,7 @@ class CreateTicket extends CreateRecord
         $data['company_id'] = $user->company_id;
         $data['to_main'] = (bool)$user->company?->is_main;
         $data['ticket_ulid'] = Str::ulid();
+        $data['slug'] = Str::slug($data['title']);
 
         return $data;
     }

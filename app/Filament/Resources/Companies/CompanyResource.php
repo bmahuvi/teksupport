@@ -5,12 +5,15 @@ namespace App\Filament\Resources\Companies;
 use App\Filament\Resources\Companies\Pages\CreateCompany;
 use App\Filament\Resources\Companies\Pages\EditCompany;
 use App\Filament\Resources\Companies\Pages\ListCompanies;
+use App\Filament\Resources\Companies\Pages\ManageCompanyTickets;
+use App\Filament\Resources\Companies\Pages\ManageCompanyUsers;
 use App\Filament\Resources\Companies\Pages\ViewCompany;
 use App\Filament\Resources\Companies\Schemas\CompanyForm;
 use App\Filament\Resources\Companies\Schemas\CompanyInfolist;
 use App\Filament\Resources\Companies\Tables\CompaniesTable;
 use App\Models\Company;
 use BackedEnum;
+use Filament\Resources\Pages\Page;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
@@ -58,6 +61,8 @@ class CompanyResource extends Resource
             'create' => CreateCompany::route('/create'),
             'view' => ViewCompany::route('/{record}'),
             'edit' => EditCompany::route('/{record}/edit'),
+            'tickets' => ManageCompanyTickets::route('/{record}/tickets'),
+            'users' => ManageCompanyUsers::route('/{record}/users'),
         ];
     }
 
@@ -67,5 +72,14 @@ class CompanyResource extends Resource
             ->withoutGlobalScopes([
                 SoftDeletingScope::class,
             ]);
+    }
+
+    public static function getRecordSubNavigation(Page $page): array
+    {
+        return $page->generateNavigationItems([
+            ViewCompany::class,
+            ManageCompanyUsers::class,
+            ManageCompanyTickets::class
+        ]);
     }
 }

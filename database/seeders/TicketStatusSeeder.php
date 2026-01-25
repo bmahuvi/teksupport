@@ -14,8 +14,8 @@ class TicketStatusSeeder extends Seeder
     {
         $statuses = [
             [
-                'name' => 'Open',
-                'slug' => 'open',
+                'name' => 'New',
+                'slug' => 'new',
                 'color' => '#3b82f6', // Blue
                 'is_default_for_new' => true,
                 'order_column' => 1,
