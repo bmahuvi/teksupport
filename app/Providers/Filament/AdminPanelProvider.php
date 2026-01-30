@@ -9,6 +9,7 @@ use Filament\Http\Middleware\Authenticate;
 use Filament\Http\Middleware\AuthenticateSession;
 use Filament\Http\Middleware\DisableBladeIconComponents;
 use Filament\Http\Middleware\DispatchServingFilamentEvent;
+use Filament\Navigation\NavigationGroup;
 use Filament\Pages\Dashboard;
 use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Panel;
@@ -66,6 +67,15 @@ class AdminPanelProvider extends PanelProvider
                 AccountWidget::class,
                 FilamentInfoWidget::class,
             ])
+            ->navigationGroups([
+                NavigationGroup::make()
+                    ->label(NavigationGroups::TICKETS->value)
+                    ->collapsed(), NavigationGroup::make()
+                    ->label(NavigationGroups::ACCOUNT->value)
+                    ->collapsed(), NavigationGroup::make()
+                    ->label(NavigationGroups::SETTINGS->value)
+                    ->collapsed(),
+            ])
             ->middleware([
                 EncryptCookies::class,
                 AddQueuedCookiesToResponse::class,
@@ -80,7 +90,7 @@ class AdminPanelProvider extends PanelProvider
             ->plugins([
                 FilamentShieldPlugin::make()
                     ->navigationLabel('Roles & Permissions')
-                    ->navigationGroup(NavigationGroups::SECURITY)
+                    ->navigationGroup(NavigationGroups::SETTINGS->value)
                     ->navigationSort(2)
             ])
             ->authMiddleware([
