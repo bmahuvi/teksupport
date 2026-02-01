@@ -24,11 +24,16 @@ class FormsTable
                 TextColumn::make('slug')
                     ->searchable(),
 
+                TextColumn::make('initial'),
+
                 TextColumn::make('fields_count')
                     ->label('Fields')
                     ->counts('fields'),
 
                 IconColumn::make('is_active')
+                    ->boolean(),
+
+                IconColumn::make('requires_approval')
                     ->boolean(),
 
                 TextColumn::make('created_at')

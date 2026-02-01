@@ -87,6 +87,7 @@ class Ticket extends Model
             'has_deadline' => 'boolean',
             'requires_approval' => 'boolean',
             'opened_at' => 'datetime',
+            'custom_fields' => 'array',
         ];
     }
 }

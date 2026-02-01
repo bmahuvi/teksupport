@@ -2,6 +2,7 @@
 
 declare(strict_types=1);
 
+use App\Filament\Resources\Companies\CompanyResource;
 use App\Filament\Resources\Tickets\TicketResource;
 
 return [
@@ -188,6 +189,11 @@ return [
                 'changePriority',
                 'assign'
             ],
+            CompanyResource::class => [
+                // custom permission
+                'activateCompany',
+                'deactivateCompany',
+            ]
 
         ],
         'exclude' => [

@@ -2,14 +2,18 @@
 
 namespace App\Models;
 
+use App\Observers\CompanyObserver;
+use Illuminate\Database\Eloquent\Attributes\ObservedBy;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Notifications\Notifiable;
 
+#[ObservedBy(CompanyObserver::class)]
 class Company extends Model
 {
-    use SoftDeletes;
+    use SoftDeletes, Notifiable;
 
     protected $guarded = ['id'];
 
@@ -37,5 +41,5 @@ class Company extends Model
     {
         return $this->hasMany(User::class);
     }
-    
+
 }

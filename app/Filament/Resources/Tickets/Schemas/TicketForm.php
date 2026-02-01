@@ -34,7 +34,8 @@ class TicketForm
                         ->schema([
                             Select::make('form_id')
                                 ->label('Ticket Form')
-                                ->options(function (Get $get) {
+                                ->placeholder('Select form type')
+                                ->options(function () {
                                     return Form::where('is_active', true)
                                         ->pluck('name', 'id')
                                         ->toArray();
@@ -43,8 +44,7 @@ class TicketForm
                                 ->live()
                                 ->afterStateUpdated(function (Set $set) {
                                     $set('custom_fields', []);
-                                })
-                                ->default(Form::where('is_active', true)->first()?->id),
+                                }),
 
                             Group::make()
                                 ->schema(fn(Get $get, ?Model $record): array => static::getDynamicFormFields($record, $get('form_id')))
@@ -68,11 +68,6 @@ class TicketForm
                                 ->enum(TicketPriority::class)
                                 ->required()
                                 ->default(TicketPriority::LOW),
-
-                            Select::make('category_id')
-                                ->label('Category')
-                                ->required()
-                                ->relationship('category', 'name'),
 
                             Toggle::make('has_deadline')
                                 ->default(false)
@@ -163,6 +158,15 @@ class TicketForm
                     $fieldComponent = Select::make($fieldName)
                         ->label($field->label)
                         ->options($field->options ?? [])
+                        ->required($field->is_required)
+                        ->disabled($isDisabled);
+                    break;
+
+                case 'select_multiple':
+                    $fieldComponent = Select::make($fieldName)
+                        ->label($field->label)
+                        ->options($field->options ?? [])
+                        ->multiple()
                         ->required($field->is_required)
                         ->disabled($isDisabled);
                     break;

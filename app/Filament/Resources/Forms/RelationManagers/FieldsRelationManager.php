@@ -49,6 +49,7 @@ class FieldsRelationManager extends RelationManager
                         'number' => 'Number',
                         'url' => 'URL',
                         'select' => 'Dropdown',
+                        'select_multiple' => 'Select Multiple',
                         'radio' => 'Radio Buttons',
                         'checkbox' => 'Checkbox',
                         'toggle' => 'Toggle',
@@ -59,7 +60,7 @@ class FieldsRelationManager extends RelationManager
                     ])
                     ->live()
                     ->afterStateUpdated(function ($state, callable $set, callable $get) {
-                        if (!in_array($state, ['select', 'radio'])) {
+                        if (!in_array($state, ['select', 'radio', 'select_multiple'])) {
                             $set('options', null);
                         }
 
@@ -72,7 +73,7 @@ class FieldsRelationManager extends RelationManager
                     ->label('Options')
                     ->keyLabel('Value')
                     ->valueLabel('Label')
-                    ->visible(fn($get) => in_array($get('type'), ['select', 'radio']))
+                    ->visible(fn($get) => in_array($get('type'), ['select', 'radio', 'select_multiple']))
                     ->helperText('Add options for dropdown or radio fields')
                     ->columnSpanFull(),
 

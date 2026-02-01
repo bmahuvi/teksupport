@@ -62,7 +62,7 @@ class TicketObserver
     public function creating(Ticket $ticket): void
     {
         if (empty($ticket->ticket_number)) {
-            $ticket->ticket_number = $this->generateTicketNumber($ticket->category->initial);
+            $ticket->ticket_number = $this->generateTicketNumber();
         }
 
         if (empty($ticket->ticket_ulid)) {
@@ -87,16 +87,16 @@ class TicketObserver
         }
     }
 
-    protected function generateTicketNumber($prefix): string
+    protected function generateTicketNumber(): string
     {
         $date = now()->format('ymd');
         $random = strtoupper(Str::random(6));
         $format = '{PREFIX}-{DATE}-{RAND}';
 
-        $ticket_number = str_replace(['{PREFIX}', '{DATE}', '{RAND}'], [$prefix, $date, $random], $format);
+        $ticket_number = str_replace(['{PREFIX}', '{DATE}', '{RAND}'], ['TKT', $date, $random], $format);
 
         if (Ticket::where('ticket_number', $ticket_number)->exists()) {
-            $this->generateTicketNumber($prefix);
+            $this->generateTicketNumber();
         }
 
         return $ticket_number;

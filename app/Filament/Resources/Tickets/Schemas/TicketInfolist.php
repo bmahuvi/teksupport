@@ -4,6 +4,7 @@ namespace App\Filament\Resources\Tickets\Schemas;
 
 use Filament\Infolists\Components\IconEntry;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class TicketInfolist
@@ -12,11 +13,14 @@ class TicketInfolist
     {
         return $schema
             ->components([
+                Section::make('Ticket Information'),
+
+
                 TextEntry::make('title'),
                 TextEntry::make('slug')
                     ->placeholder('-'),
                 TextEntry::make('ticket_number'),
-                
+
                 TextEntry::make('createdBy.name')
                     ->label('Created by'),
 

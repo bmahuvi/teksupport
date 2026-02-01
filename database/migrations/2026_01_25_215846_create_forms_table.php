@@ -15,7 +15,9 @@ return new class extends Migration {
             $table->string('name')->unique();
             $table->string('slug')->unique();
             $table->text('description')->nullable();
+            $table->boolean('requires_approval')->default(false);
             $table->boolean('is_active')->default(true);
+            $table->string('initial')->nullable();
             $table->timestamps();
         });
     }

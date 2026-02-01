@@ -67,4 +67,14 @@ class CompanyPolicy
         return $authUser->can('Reorder:Company');
     }
 
+    public function activateCompany(AuthUser $authUser, Company $company): bool
+    {
+        return $authUser->can('ActivateCompany:Company');
+    }
+
+    public function deactivateCompany(AuthUser $authUser, Company $company): bool
+    {
+        return $authUser->can('DeactivateCompany:Company');
+    }
+
 }

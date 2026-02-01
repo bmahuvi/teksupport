@@ -45,8 +45,6 @@ class TicketsTable
 
                 TextColumn::make('createdBy.name')
                     ->sortable(),
-                TextColumn::make('category.name')
-                    ->searchable(),
 
                 TextColumn::make('ticket_number')
                     ->searchable(),
