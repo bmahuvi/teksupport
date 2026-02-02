@@ -82,4 +82,9 @@ class TicketPolicy
         return $authUser->can('Assign:Ticket');
     }
 
+    public function reply(AuthUser $authUser, Ticket $ticket): bool
+    {
+        return $authUser->can('Reply:Ticket');
+    }
+
 }

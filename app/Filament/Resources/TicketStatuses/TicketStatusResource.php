@@ -12,7 +12,6 @@ use App\Models\TicketStatus;
 use BackedEnum;
 use Filament\Resources\Resource;
 use Filament\Schemas\Schema;
-use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use UnitEnum;
 
@@ -20,7 +19,7 @@ class TicketStatusResource extends Resource
 {
     protected static ?string $model = TicketStatus::class;
 
-    protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedInformationCircle;
+    protected static string|BackedEnum|null $navigationIcon = 'heroicon-o-tag';
 
     protected static ?string $recordTitleAttribute = 'name';
 

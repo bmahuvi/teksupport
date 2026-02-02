@@ -61,4 +61,9 @@ class FormResource extends Resource
             'edit' => EditForm::route('/{record}/edit'),
         ];
     }
+
+    public static function getNavigationBadge(): ?string
+    {
+        return self::getModel()::count();
+    }
 }

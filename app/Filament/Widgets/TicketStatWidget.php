@@ -20,7 +20,7 @@ class TicketStatWidget extends StatsOverviewWidget
 
             Stat::make(
                 'Open Tickets',
-                Ticket::whereHas('ticketStatus', fn(Builder $query) => $query->where('is_closing_status', false))->count()
+                Ticket::whereHas('status', fn(Builder $query) => $query->where('is_closing_status', false))->count()
             )
                 ->description('Tickets that require attention')
                 ->descriptionIcon('heroicon-m-fire')
@@ -28,7 +28,7 @@ class TicketStatWidget extends StatsOverviewWidget
                 ->color('warning'),
             Stat::make(
                 'Closed Tickets',
-                Ticket::whereHas('ticketStatus', fn(Builder $query) => $query->where('is_closing_status', true))->count()
+                Ticket::whereHas('status', fn(Builder $query) => $query->where('is_closing_status', true))->count()
             )
                 ->description('Successfully resolved tickets')
                 ->descriptionIcon('heroicon-m-check-badge')

@@ -21,7 +21,6 @@ use Filament\Tables\Table;
 class FieldsRelationManager extends RelationManager
 {
     protected static string $relationship = 'fields';
-
     protected static ?string $recordTitleAttribute = 'label';
     protected static ?string $label = 'Form Field';
 
@@ -31,16 +30,19 @@ class FieldsRelationManager extends RelationManager
             ->components([
                 TextInput::make('name')
                     ->maxLength(255)
+                    ->columnSpanFull()
                     ->helperText('Field name used internally (e.g., phone_number, company_name)')
                     ->required(),
 
                 TextInput::make('label')
                     ->label('Label shown to users')
                     ->maxLength(255)
+                    ->columnSpanFull()
                     ->required(),
 
                 Select::make('type')
                     ->required()
+                    ->columnSpanFull()
                     ->options([
                         'text' => 'Text',
                         'textarea' => 'Textarea',
@@ -53,6 +55,7 @@ class FieldsRelationManager extends RelationManager
                         'radio' => 'Radio Buttons',
                         'checkbox' => 'Checkbox',
                         'toggle' => 'Toggle',
+                        'time' => 'Time',
                         'date' => 'Date',
                         'datetime' => 'Date & Time',
                         'file' => 'File Upload',
@@ -80,6 +83,7 @@ class FieldsRelationManager extends RelationManager
                 Toggle::make('is_required')
                     ->label('Required')
                     ->default(false)
+                    ->columnSpanFull()
                     ->required(),
 
                 Textarea::make('help_text')
@@ -104,6 +108,7 @@ class FieldsRelationManager extends RelationManager
                 TextInput::make('order')
                     ->label('Order')
                     ->numeric()
+                    ->columnSpanFull()
                     ->default(function ($record) {
                         if ($record) {
                             return $record->order;
@@ -129,6 +134,7 @@ class FieldsRelationManager extends RelationManager
             'file_multiple' => 'mimes:jpg,png,pdf|max:5120|max_files:5',
             'date' => 'date|after:today',
             'datetime' => 'date|after:now',
+            'time' => 'date_format:H:i|after:now',
         ];
 
         return $examples[$type] ?? 'max:255';

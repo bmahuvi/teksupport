@@ -8,16 +8,18 @@ use App\Models\Ticket;
 use App\Models\TicketStatus;
 use Filament\Forms\Components\Checkbox;
 use Filament\Forms\Components\DatePicker;
+use Filament\Forms\Components\DateTimePicker;
 use Filament\Forms\Components\FileUpload;
 use Filament\Forms\Components\Radio;
 use Filament\Forms\Components\RichEditor;
 use Filament\Forms\Components\Select;
 use Filament\Forms\Components\Textarea;
 use Filament\Forms\Components\TextInput;
+use Filament\Forms\Components\TimePicker;
 use Filament\Forms\Components\Toggle;
-use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Group;
 use Filament\Schemas\Components\Section;
+use Filament\Schemas\Components\Text;
 use Filament\Schemas\Components\Utilities\Get;
 use Filament\Schemas\Components\Utilities\Set;
 use Filament\Schemas\Schema;
@@ -59,7 +61,7 @@ class TicketForm
                         ->schema([
                             Select::make('ticket_status_id')
                                 ->label('Ticket Status')
-                                ->relationship('ticketStatus', 'name')
+                                ->relationship('status', 'name')
                                 ->default(TicketStatus::firstWhere('is_default_for_new', true)->id)
                                 ->disabled(),
 
@@ -92,7 +94,7 @@ class TicketForm
         $form = null;
 
         if ($formId) {
-            $form = Form::with('fields')->find($formId);
+            $form = Form::with(['fields' => fn($q) => $q->orderBy('order')])->find($formId);
         } elseif ($record instanceof Ticket) {
             if (isset($record->form_id)) {
                 $form = Form::with('fields')->find($record->form_id);
@@ -106,18 +108,11 @@ class TicketForm
         if (!$form || !$form->fields->count()) {
             if (!$formId) {
                 return [
-                    TextEntry::make('select_form')
-                        ->label('')
-                        ->state('Please select a form to proceed.')
-                        ->columnSpanFull(),
+                    Text::make('Please select a form to proceed'),
                 ];
             }
-
             return [
-                TextEntry::make('no_form')
-                    ->label('')
-                    ->state('No form configured for this department')
-                    ->columnSpanFull(),
+                Text::make('No form'),
             ];
         }
 
@@ -128,12 +123,51 @@ class TicketForm
             $fieldComponent = null;
             $fieldName = "custom_fields.{$field->name}";
 
+            $rules = static::buildRulesForField($field);
+
             switch ($field->type) {
 
                 case 'text':
                     $fieldComponent = TextInput::make($fieldName)
                         ->label($field->label)
                         ->required($field->is_required)
+                        ->rules($rules)
+                        ->disabled($isDisabled);
+                    break;
+
+                case 'number':
+                    $fieldComponent = TextInput::make($fieldName)
+                        ->label($field->label)
+                        ->numeric()
+                        ->required($field->is_required)
+                        ->rules($rules)
+                        ->disabled($isDisabled);
+                    break;
+
+                case 'url':
+                    $fieldComponent = TextInput::make($fieldName)
+                        ->label($field->label)
+                        ->url()
+                        ->required($field->is_required)
+                        ->rules($rules)
+                        ->disabled($isDisabled);
+                    break;
+
+                case 'phone':
+                    $fieldComponent = TextInput::make($fieldName)
+                        ->label($field->label)
+                        ->tel()
+                        ->required($field->is_required)
+                        ->rules($rules)
+                        ->disabled($isDisabled);
+                    break;
+
+                case 'email':
+                    $fieldComponent = TextInput::make($fieldName)
+                        ->label($field->label)
+                        ->email()
+                        ->required($field->is_required)
+                        ->rules($rules)
                         ->disabled($isDisabled);
                     break;
 
@@ -143,6 +177,7 @@ class TicketForm
                         ->required($field->is_required)
                         ->rows(4)
                         ->disabled($isDisabled)
+                        ->rules($rules)
                         ->columnSpanFull();
                     break;
 
@@ -151,6 +186,7 @@ class TicketForm
                         ->label($field->label)
                         ->required($field->is_required)
                         ->disabled($isDisabled)
+                        ->rules($rules)
                         ->columnSpanFull();
                     break;
 
@@ -158,7 +194,10 @@ class TicketForm
                     $fieldComponent = Select::make($fieldName)
                         ->label($field->label)
                         ->options($field->options ?? [])
+                        ->searchable(false)
+                        ->preload(false)
                         ->required($field->is_required)
+                        ->rules($rules)
                         ->disabled($isDisabled);
                     break;
 
@@ -168,6 +207,36 @@ class TicketForm
                         ->options($field->options ?? [])
                         ->multiple()
                         ->required($field->is_required)
+                        ->rules($rules)
+                        ->disabled($isDisabled);
+                    break;
+
+                case 'date':
+                    $fieldComponent = DatePicker::make($fieldName)
+                        ->label($field->label)
+                        ->required($field->is_required)
+                        ->weekStartsOnMonday()
+                        ->format('Y-m-d')
+                        ->displayFormat('d M Y')
+                        ->rules($rules)
+                        ->disabled($isDisabled);
+                    break;
+
+                case 'datetime':
+                    $fieldComponent = DateTimePicker::make($fieldName)
+                        ->label($field->label)
+                        ->required($field->is_required)
+                        ->rules($rules)
+                        ->format('Y-m-d H:i:s')
+                        ->displayFormat('Y-m-d H:i:s')
+                        ->disabled($isDisabled);
+                    break;
+
+                case 'time':
+                    $fieldComponent = TimePicker::make($fieldName)
+                        ->label($field->label)
+                        ->required($field->is_required)
+                        ->rules($rules)
                         ->disabled($isDisabled);
                     break;
 
@@ -176,6 +245,7 @@ class TicketForm
                         ->label($field->label)
                         ->options($field->options ?? [])
                         ->required($field->is_required)
+                        ->rules($rules)
                         ->disabled($isDisabled);
                     break;
 
@@ -183,6 +253,7 @@ class TicketForm
                     $fieldComponent = Checkbox::make($fieldName)
                         ->label($field->label)
                         ->required($field->is_required)
+                        ->rules($rules)
                         ->disabled($isDisabled);
                     break;
 
@@ -191,6 +262,8 @@ class TicketForm
                         ->label($field->label)
                         ->required($field->is_required)
                         ->default(false)
+                        ->rules($rules)
+                        ->inline()
                         ->disabled($isDisabled);
                     break;
 
@@ -239,10 +312,90 @@ class TicketForm
             }
 
             if ($fieldComponent) {
+                if (!empty($field->help_text)) {
+                    $fieldComponent->helperText($field->help_text);
+                }
+
                 $fields[] = $fieldComponent;
             }
         }
 
         return $fields;
     }
+
+
+    public static function buildRulesForField($field): array
+    {
+        $rules = [];
+
+        if ($field->is_required) {
+            $rules[] = 'required';
+        } else {
+            $rules[] = 'nullable';
+        }
+
+        switch ($field->type) {
+            case 'number':
+                $rules[] = 'numeric';
+                break;
+
+            case 'email':
+                $rules[] = 'email';
+                break;
+
+            case 'url':
+                $rules[] = 'url';
+                break;
+
+            case 'time':
+                $rules[] = 'date_format:H:i';
+                break;
+
+            case 'datetime':
+            case 'date':
+                $rules[] = 'date';
+                break;
+
+            case 'radio':
+            case 'select':
+            case 'phone':
+                $rules[] = 'string';
+                break;
+
+            case 'file_multiple':
+            case 'select_multiple':
+                $rules[] = 'array';
+                break;
+
+            case 'toggle':
+            case 'checkbox':
+                if ($field->is_required) {
+                    $rules = array_values(array_diff($rules, ['required']));
+                    $rules[] = 'accepted';
+                } else {
+                    $rules[] = 'boolean';
+                }
+                break;
+
+            case 'file':
+                $rules[] = 'file';
+                break;
+
+        }
+
+        if (!empty($field->validation_rules)) {
+            $extra = array_map('trim', explode('|', $field->validation_rules));
+
+            $extra = array_filter($extra);
+
+            $extra = array_filter($extra, fn($r) => !str_starts_with($r, 'max_files:') &&
+                !str_starts_with($r, 'min_files:')
+            );
+
+            $rules = array_merge($rules, $extra);
+        }
+
+        return array_values(array_unique($rules));
+    }
+
 }

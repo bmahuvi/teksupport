@@ -14,10 +14,6 @@ class Ticket extends Model
 {
     protected $guarded = ['id'];
 
-    public function category(): BelongsTo
-    {
-        return $this->belongsTo(Category::class);
-    }
 
     public function company(): BelongsTo
     {
@@ -34,19 +30,29 @@ class Ticket extends Model
         return $this->hasMany(Release::class);
     }
 
-    public function comments(): HasMany
+    public function activities(): HasMany
     {
-        return $this->hasMany(Comment::class);
+        return $this->hasMany(TicketActivity::class);
     }
 
-    public function ticketStatus(): BelongsTo
+    public function replies(): HasMany
     {
-        return $this->belongsTo(TicketStatus::class);
+        return $this->hasMany(TicketReply::class);
+    }
+
+    public function status(): BelongsTo
+    {
+        return $this->belongsTo(TicketStatus::class, 'ticket_status_id');
     }
 
     public function assignedTo(): BelongsTo
     {
         return $this->belongsTo(User::class, 'assigned_to');
+    }
+
+    public function form(): BelongsTo
+    {
+        return $this->belongsTo(Form::class);
     }
 
     public function markOpenedBy($userId): void
@@ -88,6 +94,7 @@ class Ticket extends Model
             'requires_approval' => 'boolean',
             'opened_at' => 'datetime',
             'custom_fields' => 'array',
+            'last_activity_at' => 'datetime',
         ];
     }
 }

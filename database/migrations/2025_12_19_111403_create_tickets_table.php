@@ -12,14 +12,13 @@ return new class extends Migration {
     {
         Schema::create('tickets', function (Blueprint $table) {
             $table->id();
-            $table->string('title');
             $table->string('ticket_ulid')->unique();
             $table->string('ticket_number')->unique();
-            $table->foreignId('created_by')->nullable()->constrained('users')->cascadeOnDelete();
+            $table->foreignId('created_by')->constrained('users')->cascadeOnDelete();
             $table->foreignId('assigned_to')->nullable()->constrained('users')->nullOnDelete();
             $table->string('priority')->default('low');
             $table->json('custom_fields')->nullable();
-            $table->foreignId('company_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
             $table->foreignId('ticket_status_id')->constrained()->cascadeOnDelete();
             $table->boolean('has_deadline')->default(false);
             $table->timestamp('deadline')->nullable();
@@ -27,6 +26,7 @@ return new class extends Migration {
             $table->boolean('is_opened')->default(false);
             $table->foreignId('opened_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('opened_at')->nullable();
+            $table->timestamp('last_activity_at')->nullable();
             $table->timestamps();
         });
     }

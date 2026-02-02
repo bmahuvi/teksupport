@@ -37,7 +37,11 @@ class FormFieldSeeder extends Seeder
                     'label' => 'Incident Type',
                     'type' => 'select',
                     'is_required' => true,
-                    'options' => ['Data Issue' => 'Data Issue', 'Access Issue' => 'Access Issue', 'Service Disruption' => 'Service Disruption'],
+                    'options' => [
+                        'Data Issue' => 'Data Issue',
+                        'Access Issue' => 'Access Issue',
+                        'Service Disruption' => 'Service Disruption'
+                    ],
                     'order' => 2
                 ],
                 [
@@ -45,7 +49,11 @@ class FormFieldSeeder extends Seeder
                     'label' => 'Impact',
                     'type' => 'select',
                     'is_required' => true,
-                    'options' => ['Low' => 'Low', 'Medium' => 'Medium', 'High' => 'High'],
+                    'options' => [
+                        'Low' => 'Low',
+                        'Medium' => 'Medium',
+                        'High' => 'High'
+                    ],
                     'order' => 3
                 ],
                 [
@@ -53,21 +61,25 @@ class FormFieldSeeder extends Seeder
                     'label' => 'Urgency',
                     'type' => 'select',
                     'is_required' => true,
-                    'options' => ['Low' => 'Low', 'Medium' => 'Medium', 'High' => 'High'],
+                    'options' => [
+                        'Low' => 'Low',
+                        'Medium' => 'Medium',
+                        'High' => 'High'
+                    ],
                     'order' => 4
                 ],
                 [
                     'name' => 'incident_date',
-                    'label' => 'Incident Date & Time',
-                    'type' => 'datetime',
-                    'is_required' => true,
-                    'validation_rules' => 'date|date_format:Y-m-d H:i:s|before_or_equal:today',
+                    'label' => 'Incident Date',
+                    'type' => 'date',
+                    'is_required' => false,
+                    'validation_rules' => 'date|date_format:Y-m-d|before_or_equal:today',
                     'order' => 5
                 ],
                 [
                     'name' => 'still_happening',
                     'label' => 'Is it still happening?',
-                    'type' => 'toggle',
+                    'type' => 'radio',
                     'is_required' => true,
                     'options' => ['Yes' => 'Yes', 'No' => 'No'],
                     'order' => 6

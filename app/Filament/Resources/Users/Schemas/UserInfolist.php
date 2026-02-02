@@ -12,6 +12,11 @@ class UserInfolist
         return $schema
             ->components([
                 TextEntry::make('name'),
+                TextEntry::make('roles')
+                    ->label('Roles')
+                    ->badge()
+                    ->formatStateUsing(fn($state, $record) => $record->roles->pluck('name')->join(', '))
+                    ->placeholder('-'),
                 TextEntry::make('gender')
                     ->badge(),
                 TextEntry::make('email')

@@ -58,5 +58,6 @@ class TicketResource extends Resource
             'edit' => EditTicket::route('/{record}/edit'),
         ];
     }
-    
+
+
 }

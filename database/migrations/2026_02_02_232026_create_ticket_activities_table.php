@@ -10,15 +10,13 @@ return new class extends Migration {
      */
     public function up(): void
     {
-        Schema::create('comments', function (Blueprint $table) {
+        Schema::create('ticket_activities', function (Blueprint $table) {
             $table->id();
             $table->foreignId('ticket_id')->constrained()->cascadeOnDelete();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->enum('status', ['New', 'Update'])->default('New');
-            $table->longText('comment');
-            $table->boolean('is_opened')->default(false);
-            $table->foreignId('opened_by')->nullable()->constrained('users')->nullOnDelete();
-            $table->timestamp('opened_at')->nullable();
+            $table->string('description');
+            $table->text('old_value')->nullable();
+            $table->text('new_value')->nullable();
             $table->timestamps();
         });
     }
@@ -28,6 +26,6 @@ return new class extends Migration {
      */
     public function down(): void
     {
-        Schema::dropIfExists('comments');
+        Schema::dropIfExists('ticket_activities');
     }
 };

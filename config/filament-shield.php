@@ -176,18 +176,11 @@ return [
                 'delete',
             ],
             TicketResource::class => [
-                'viewAny',
-                'view',
-                'create',
-                'update',
-                'delete',
-                'restore',
-                'forceDelete',
-
                 // custom permission
                 'changeStatus',
                 'changePriority',
-                'assign'
+                'assign',
+                'reply'
             ],
             CompanyResource::class => [
                 // custom permission
