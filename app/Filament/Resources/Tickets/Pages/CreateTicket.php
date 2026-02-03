@@ -23,7 +23,7 @@ class CreateTicket extends CreateRecord
 
         $data['created_by'] = $user->id;
         $data['company_id'] = $user->company_id;
-        $data['to_main'] = (bool)$user->company?->is_main;
+        $data['to_main'] = !$user->company?->is_main;
         $data['ticket_ulid'] = strtolower(Str::ulid());
 
         foreach ($form->fields as $field) {

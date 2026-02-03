@@ -42,4 +42,11 @@ class Company extends Model
         return $this->hasMany(User::class);
     }
 
+    protected function casts(): array
+    {
+        return [
+            'is_main' => 'boolean',
+        ];
+    }
+
 }

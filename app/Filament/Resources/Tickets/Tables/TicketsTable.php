@@ -29,7 +29,12 @@ class TicketsTable
                     return;
                 }
 
-                $query->where('created_by', $user->getKey());
+                if ($user->company?->is_main) {
+                    return;
+                }
+
+                $query->where('company_id', $user->company_id);
+
             })
             ->recordClasses(fn(Model $record) => match (true) {
                 $record->isNotOpened()
@@ -100,6 +105,7 @@ class TicketsTable
                     ->sortable()
                     ->toggleable(isToggledHiddenByDefault: true),
             ])
+            ->defaultSort('created_at', 'desc')
             ->filters([
                 SelectFilter::make('company')
                     ->relationship('company', 'name')
