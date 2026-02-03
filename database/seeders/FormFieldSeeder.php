@@ -27,7 +27,7 @@ class FormFieldSeeder extends Seeder
                 ],
                 [
                     'name' => 'description',
-                    'label' => 'Description',
+                    'label' => 'Incident Summary',
                     'type' => 'textarea',
                     'is_required' => true,
                     'order' => 1
@@ -40,9 +40,23 @@ class FormFieldSeeder extends Seeder
                     'options' => [
                         'Data Issue' => 'Data Issue',
                         'Access Issue' => 'Access Issue',
-                        'Service Disruption' => 'Service Disruption'
+                        'Service Disruption' => 'Service Disruption',
+                        'Other' => 'Other',
                     ],
                     'order' => 2
+                ],
+                [
+                    'name' => 'incident_category',
+                    'label' => 'Incident Category',
+                    'type' => 'select',
+                    'is_required' => true,
+                    'options' => [
+                        'Hardware' => 'Hardware',
+                        'Network' => 'Network',
+                        'Software' => 'Software',
+                        'Other' => 'Other'
+                    ],
+                    'order' => 3
                 ],
                 [
                     'name' => 'impact',
@@ -54,7 +68,7 @@ class FormFieldSeeder extends Seeder
                         'Medium' => 'Medium',
                         'High' => 'High'
                     ],
-                    'order' => 3
+                    'order' => 4
                 ],
                 [
                     'name' => 'urgency',
@@ -66,7 +80,7 @@ class FormFieldSeeder extends Seeder
                         'Medium' => 'Medium',
                         'High' => 'High'
                     ],
-                    'order' => 4
+                    'order' => 5
                 ],
                 [
                     'name' => 'incident_date',
@@ -74,7 +88,7 @@ class FormFieldSeeder extends Seeder
                     'type' => 'date',
                     'is_required' => false,
                     'validation_rules' => 'date|date_format:Y-m-d|before_or_equal:today',
-                    'order' => 5
+                    'order' => 6
                 ],
                 [
                     'name' => 'still_happening',
@@ -82,15 +96,16 @@ class FormFieldSeeder extends Seeder
                     'type' => 'radio',
                     'is_required' => true,
                     'options' => ['Yes' => 'Yes', 'No' => 'No'],
-                    'order' => 6
+                    'order' => 7
                 ],
                 [
                     'name' => 'attachments',
                     'label' => 'Attachments',
                     'type' => 'file_multiple',
                     'is_required' => false,
+                    'help_text' => 'Screenshots, logs, files',
                     'validation_rules' => 'mimes:jpg,jpeg,png,pdf,doc,docx|max:5120',
-                    'order' => 7
+                    'order' => 8
                 ]
             ]);
         }
@@ -330,5 +345,46 @@ class FormFieldSeeder extends Seeder
                 ]
             ]);
         }
+
+        /**
+         * Inquiry Form Fields
+         */
+        $inquiry = Form::where('name', 'Inquiry')->first();
+        if ($inquiry) {
+            $inquiry->fields()->createMany([
+                [
+                    'name' => 'title',
+                    'label' => 'Title',
+                    'type' => 'text',
+                    'help_text' => 'Short summary of the inquiry',
+                    'is_required' => true,
+                    'validation_rules' => 'min:3|max:255'
+                ],
+                [
+                    'name' => 'description',
+                    'label' => 'Description',
+                    'type' => 'textarea',
+                    'is_required' => true,
+                    'validation_rules' => 'min:3|max:255',
+                    'order' => 1
+                ],
+                [
+                    'name' => 'category',
+                    'label' => 'Inquiry Category',
+                    'type' => 'select',
+                    'is_required' => true,
+                    'options' => [
+                        'General Information' => 'General Information',
+                        'Technical Information' => 'Technical Information',
+                        'Product Information' => 'Product Information',
+                        'Process Information' => 'Process Information',
+                        'Training Information' => 'Training Information',
+                        'Other' => 'Other',
+                    ],
+                    'order' => 2
+                ],
+            ]);
+        }
+
     }
 }

@@ -22,7 +22,8 @@ return new class extends Migration {
             $table->boolean('change_password')->default(false);
             $table->timestamp('last_password_change')->nullable();
             $table->smallInteger('login_attempts')->default(0);
-            $table->foreignId('company_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->ulid()->unique();
             $table->rememberToken();
             $table->timestamps();

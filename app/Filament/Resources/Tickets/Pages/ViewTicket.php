@@ -595,23 +595,28 @@ class ViewTicket extends ViewRecord
                 ->schema([
                     Select::make('assignee')
                         ->label('Select Assignee')
+                        ->required()
                         ->searchable()
                         ->getOptionLabelUsing(function ($value) {
-                            $userModel = User::class;
-                            $user = $userModel::find($value);
+                            $user = User::find($value);
                             return $user?->name;
                         })
                         ->options(function () {
-                            $userModel = User::class;
-
-                            return $userModel::where('company_id', Auth::user()->company_id)
+                            return User::where('status', 1)
+                                ->where('id', '!=', $this->record->assigned_to)
+                                ->where(function ($q) {
+                                    $q->where('company_id', Auth::user()->company_id)
+                                        ->orWhere('company_id', $this->record->company_id);
+                                })
+                                ->orderBy('name')
                                 ->limit(50)
                                 ->get()
                                 ->mapWithKeys(fn($user) => [$user->getKey() => $user->name])
                                 ->toArray();
                         })
                         ->default($this->record->assigned_to)
-                        ->native(false)
+                        ->native(false),
+
                 ])
                 ->action(function (array $data) {
                     $this->assignTicket($data['assignee']);

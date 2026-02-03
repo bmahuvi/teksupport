@@ -16,23 +16,29 @@ class FormSeeder extends Seeder
             [
                 'name' => 'Change Request',
                 'slug' => 'change-request',
-                'description' => 'A form for CR requests',
+                'description' => 'A formal proposal to modify a system, process, or configuration',
                 'initial' => 'CR',
                 'requires_approval' => true,
             ],
             [
                 'name' => 'Incident',
                 'slug' => 'incident',
-                'description' => 'A form for incidents',
+                'description' => 'Something is broken or service is down and needs urgent fixing.',
                 'initial' => 'INC',
             ],
             [
                 'name' => 'Training',
                 'slug' => 'training',
-                'description' => 'A form for trainings',
+                'description' => 'Requests for knowledge transfer, workshops, or user education',
                 'initial' => 'TR',
                 'requires_approval' => true,
             ],
+            [
+                'name' => 'Inquiry',
+                'slug' => 'inquiry',
+                'description' => 'Requests for information, reports, documentation, clarification',
+                'initial' => 'INQ',
+            ]
         ];
 
         foreach ($forms as $form) {

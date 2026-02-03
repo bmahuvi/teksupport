@@ -21,6 +21,7 @@ class DatabaseSeeder extends Seeder
             TicketStatusSeeder::class,
             FormSeeder::class,
             FormFieldSeeder::class,
+            DemoDataSeeder::class,
         ]);
     }
 }

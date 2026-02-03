@@ -24,7 +24,7 @@ class CompanySeeder extends Seeder
             'phone' => '0786670698',
             'is_active' => true,
             'is_main' => true,
-            'ulid' => Str::ulid()
+            'ulid' => strtolower(Str::ulid())
         ]);
     }
 }

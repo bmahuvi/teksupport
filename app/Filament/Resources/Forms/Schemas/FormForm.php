@@ -20,6 +20,7 @@ class FormForm
                     ->required()
                     ->maxLength(255)
                     ->live(onBlur: true)
+                    ->columnSpanFull()
                     ->afterStateUpdated(fn(Set $set, ?string $state) => $set('slug', Str::slug($state))),
 
                 TextInput::make('slug')
@@ -27,10 +28,20 @@ class FormForm
                     ->maxLength(255)
                     ->unique(Form::class, 'slug', ignoreRecord: true),
 
+                TextInput::make('initial')
+                    ->required()
+                    ->maxLength(3)
+                    ->unique(Form::class, 'initial', ignoreRecord: true),
+
                 Textarea::make('description')
                     ->rows(3)
                     ->maxLength(65535)
                     ->columnSpanFull(),
+
+                Toggle::make('requires_approval')
+                    ->label('Is Approval Required')
+                    ->required()
+                    ->default(false),
 
                 Toggle::make('is_active')
                     ->label('Is Active')
