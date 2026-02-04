@@ -35,7 +35,6 @@ class AdminPanelProvider extends PanelProvider
             ->login()
             ->topbar(true)
             ->authGuard('web')
-            ->registration()
             ->profile()
             ->passwordReset()
             ->emailVerification()

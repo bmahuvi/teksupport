@@ -8,8 +8,8 @@ use App\Filament\Resources\Tickets\Pages\EditTicket;
 use App\Filament\Resources\Tickets\Pages\ListTickets;
 use App\Filament\Resources\Tickets\Pages\ViewTicket;
 use App\Filament\Resources\Tickets\Schemas\TicketForm;
-use App\Filament\Resources\Tickets\Schemas\TicketInfolist;
 use App\Filament\Resources\Tickets\Tables\TicketsTable;
+use App\Filament\Resources\Tickets\Widgets\TicketStats;
 use App\Models\Ticket;
 use BackedEnum;
 use Filament\Resources\Resource;
@@ -32,10 +32,6 @@ class TicketResource extends Resource
         return TicketForm::configure($schema);
     }
 
-    public static function infolist(Schema $schema): Schema
-    {
-        return TicketInfolist::configure($schema);
-    }
 
     public static function table(Table $table): Table
     {
@@ -46,6 +42,13 @@ class TicketResource extends Resource
     {
         return [
             //
+        ];
+    }
+
+    public static function getWidgets(): array
+    {
+        return [
+            TicketStats::class
         ];
     }
 

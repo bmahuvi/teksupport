@@ -27,6 +27,7 @@ use Filament\Schemas\Components\Section;
 use Filament\Schemas\Components\Tabs;
 use Filament\Schemas\Components\Tabs\Tab;
 use Filament\Schemas\Schema;
+use Filament\Support\Colors\Color;
 use Filament\Support\Enums\FontWeight;
 use Filament\Support\Enums\TextSize;
 use Illuminate\Support\Carbon;
@@ -555,6 +556,7 @@ class ViewTicket extends ViewRecord
             foreach (TicketStatus::all() as $status) {
                 $statusActions[] = Action::make('status_' . $status->id)
                     ->label($status->name)
+                    ->color(Color::hex($status->color))
                     ->visible(fn($record) => $record->ticket_status_id !== $status->id)
                     ->action(fn() => $this->changeStatus($status->id));
             }
