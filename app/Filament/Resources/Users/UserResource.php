@@ -6,6 +6,7 @@ use App\Enums\NavigationGroups;
 use App\Filament\Resources\Users\Pages\CreateUser;
 use App\Filament\Resources\Users\Pages\EditUser;
 use App\Filament\Resources\Users\Pages\ListUsers;
+use App\Filament\Resources\Users\Pages\ManageUserCompany;
 use App\Filament\Resources\Users\Pages\ManageUserTickets;
 use App\Filament\Resources\Users\Pages\ViewUser;
 use App\Filament\Resources\Users\Schemas\UserForm;
@@ -61,6 +62,7 @@ class UserResource extends Resource
             'view' => ViewUser::route('/{record}'),
             'edit' => EditUser::route('/{record}/edit'),
             'tickets' => ManageUserTickets::route('/{record}/tickets'),
+            'company' => ManageUserCompany::route('/{record}/company'),
         ];
     }
 
@@ -68,6 +70,7 @@ class UserResource extends Resource
     {
         return $page->generateNavigationItems([
             ViewUser::class,
+            ManageUserCompany::class,
             ManageUserTickets::class
         ]);
     }
