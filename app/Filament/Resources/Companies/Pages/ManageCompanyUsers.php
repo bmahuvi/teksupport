@@ -24,8 +24,12 @@ class ManageCompanyUsers extends ManageRelatedRecords
     protected static string $resource = CompanyResource::class;
 
     protected static string $relationship = 'users';
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
+
+    public static function getNavigationBadge(): ?string
+    {
+        return \Livewire::current()->getRecord()->users->count();
+    }
 
     public function form(Schema $schema): Schema
     {

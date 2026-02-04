@@ -586,14 +586,14 @@ class ViewTicket extends ViewRecord
                 ->icon('heroicon-o-flag')
                 ->color('gray')
                 ->button()
-                ->visible(fn() => $this->canChangePriority()),
+                ->visible(fn() => $this->canChangePriority() && $this->record->isNotClosed()),
 
             Action::make('assignTicket')
                 ->label('Assign Ticket')
                 ->icon('heroicon-o-user-plus')
                 ->color('gray')
                 ->button()
-                ->visible(fn() => $this->canAssignTicket())
+                ->visible(fn() => $this->canAssignTicket() && $this->record->isNotClosed())
                 ->schema([
                     Select::make('assignee')
                         ->label('Select Assignee')

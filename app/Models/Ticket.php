@@ -40,6 +40,11 @@ class Ticket extends Model
         return $this->hasMany(TicketReply::class);
     }
 
+    public function isNotClosed(): bool
+    {
+        return $this->status()->where('is_closing_status', false)->exists();
+    }
+
     public function status(): BelongsTo
     {
         return $this->belongsTo(TicketStatus::class, 'ticket_status_id');

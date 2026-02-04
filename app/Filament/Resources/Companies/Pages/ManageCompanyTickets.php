@@ -15,8 +15,12 @@ class ManageCompanyTickets extends ManageRelatedRecords
     protected static string $resource = CompanyResource::class;
 
     protected static string $relationship = 'tickets';
-
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedTicket;
+
+    public static function getNavigationBadge(): ?string
+    {
+        return \Livewire::current()->getRecord()->tickets->count();
+    }
 
     public function table(Table $table): Table
     {

@@ -13,4 +13,12 @@ class TicketStatus extends Model
     {
         return $this->hasMany(Ticket::class);
     }
+
+    protected function casts(): array
+    {
+        return [
+            'is_closing_status' => 'boolean',
+            'is_default_for_new' => 'boolean',
+        ];
+    }
 }
