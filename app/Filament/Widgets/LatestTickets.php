@@ -26,4 +26,9 @@ class LatestTickets extends TableWidget
                     ->url(fn(Ticket $record): string => TicketResource::getUrl('edit', ['record' => $record])),
             ]);
     }
+
+    protected function isTablePaginationEnabled(): bool
+    {
+        return false;
+    }
 }

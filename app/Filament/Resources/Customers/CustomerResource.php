@@ -2,6 +2,7 @@
 
 namespace App\Filament\Resources\Customers;
 
+use App\Enums\NavigationGroups;
 use App\Filament\Resources\Customers\Pages\CreateCustomer;
 use App\Filament\Resources\Customers\Pages\EditCustomer;
 use App\Filament\Resources\Customers\Pages\ListCustomers;
@@ -16,6 +17,7 @@ use Filament\Schemas\Schema;
 use Filament\Support\Icons\Heroicon;
 use Filament\Tables\Table;
 use Illuminate\Support\Facades\Auth;
+use UnitEnum;
 
 class CustomerResource extends Resource
 {
@@ -25,7 +27,9 @@ class CustomerResource extends Resource
 
     protected static ?string $recordTitleAttribute = 'name';
     protected static ?string $label = 'Customer';
-    protected static ?int $navigationSort = 4;
+    protected static ?int $navigationSort = 2;
+
+    protected static string|UnitEnum|null $navigationGroup = NavigationGroups::ACCOUNT->value;
 
     public static function form(Schema $schema): Schema
     {

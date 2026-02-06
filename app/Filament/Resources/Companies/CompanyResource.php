@@ -54,6 +54,11 @@ class CompanyResource extends Resource
         ];
     }
 
+    public static function getEloquentQuery(): Builder
+    {
+        return parent::getEloquentQuery()->withCount('users');
+    }
+
     public static function getPages(): array
     {
         return [

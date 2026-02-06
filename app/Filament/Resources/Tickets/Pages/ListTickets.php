@@ -3,11 +3,13 @@
 namespace App\Filament\Resources\Tickets\Pages;
 
 use App\Filament\Resources\Tickets\TicketResource;
-use App\Models\TicketStatus;
+use App\Models\Ticket;
 use Filament\Actions\CreateAction;
+use Filament\Facades\Filament;
 use Filament\Pages\Concerns\ExposesTableToWidgets;
 use Filament\Resources\Pages\ListRecords;
 use Filament\Schemas\Components\Tabs\Tab;
+use Illuminate\Database\Eloquent\Builder;
 
 class ListTickets extends ListRecords
 {
@@ -17,18 +19,53 @@ class ListTickets extends ListRecords
 
     public function getTabs(): array
     {
+        $user = Filament::auth()->user();
+
         $tabs = [
-            null => Tab::make('All'),
+            'all' => Tab::make('All')
+                ->modifyQueryUsing(fn(Builder $query) => $query->whereHas('status', fn(Builder $q) => $q->where('is_closing_status', false))
+                )
+                ->badge(Ticket::whereHas('status', fn($q) => $q->where('is_closing_status', false))->count())
+                ->icon('heroicon-o-ticket'),
+
+            'my_tickets' => Tab::make('My Tickets')
+                ->modifyQueryUsing(fn(Builder $query) => $query->where('created_by', $user->getKey())
+                )
+                ->badge(Ticket::where('created_by', $user->getKey())
+                    ->count())
+                ->icon('heroicon-o-user'),
+
+            'open' => Tab::make('Open')
+                ->modifyQueryUsing(fn(Builder $query) => $query->whereHas('status', fn(Builder $q) => $q->where('is_closing_status', false))
+                )
+                ->badge(Ticket::whereHas('status', fn($q) => $q->where('is_closing_status', false))->count())
+                ->icon('heroicon-o-clock'),
+
+            'unassigned' => Tab::make('Unassigned')
+                ->modifyQueryUsing(fn(Builder $query) => $query->whereNull('assigned_to')
+                    ->whereHas('status', fn(Builder $q) => $q->where('is_closing_status', false))
+                )
+                ->badge(Ticket::whereNull('assigned_to')
+                    ->whereHas('status', fn($q) => $q->where('is_closing_status', false))
+                    ->count())
+                ->icon('heroicon-o-user-minus'),
+
+            'closed' => Tab::make('Closed')
+                ->modifyQueryUsing(fn(Builder $query) => $query->whereHas('status', fn(Builder $q) => $q->where('is_closing_status', true))
+                )
+                ->badge(Ticket::whereHas('status', fn($q) => $q->where('is_closing_status', true))->count())
+                ->icon('heroicon-o-check-circle'),
         ];
 
-        TicketStatus::query()
-            ->orderBy('order_column')
-            ->get()
-            ->each(function (TicketStatus $status) use (&$tabs) {
-                $tabs[$status->slug ?? str($status->name)->slug()->toString()] = Tab::make($status->name)
-                    ->query(fn($query) => $query->where('ticket_status_id', $status->id));
-            });
-
+//        TicketStatus::query()
+//            ->where('is_active', true)
+//            ->orderBy('order_column')
+//            ->get()
+//            ->each(function (TicketStatus $status) use (&$tabs) {
+//                $tabs[$status->slug ?? str($status->name)->slug()->toString()] = Tab::make($status->name)
+//                    ->query(fn($query) => $query->where('ticket_status_id', $status->id));
+//            });
+//
         return $tabs;
     }
 

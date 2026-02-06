@@ -12,18 +12,34 @@ class CustomerInfolist
         return $schema
             ->components([
                 TextEntry::make('name'),
+
                 TextEntry::make('phone'),
+
                 TextEntry::make('email')
                     ->label('Email address'),
+
                 TextEntry::make('company_name'),
+
                 TextEntry::make('status')
-                    ->badge(),
+                    ->badge()
+                    ->color(function ($state) {
+                        return match ($state) {
+                            'New' => 'warning',
+                            'Processed' => 'success',
+                            'Notified' => 'info',
+                            default => 'gray',
+                        };
+                    }),
+
                 TextEntry::make('created_at')
                     ->dateTime()
                     ->placeholder('-'),
+
                 TextEntry::make('updated_at')
                     ->dateTime()
                     ->placeholder('-'),
             ]);
     }
+
+
 }

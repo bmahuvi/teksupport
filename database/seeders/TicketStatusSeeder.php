@@ -56,6 +56,7 @@ class TicketStatusSeeder extends Seeder
                 'slug' => 'waiting-release',
                 'color' => '#28a745',
                 'order_column' => 6,
+                'is_active' => false
             ],
         ];
 

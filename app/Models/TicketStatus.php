@@ -19,6 +19,7 @@ class TicketStatus extends Model
         return [
             'is_closing_status' => 'boolean',
             'is_default_for_new' => 'boolean',
+            'is_active' => 'boolean',
         ];
     }
 }

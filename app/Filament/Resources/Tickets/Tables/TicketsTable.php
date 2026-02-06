@@ -9,7 +9,6 @@ use Filament\Actions\DeleteBulkAction;
 use Filament\Actions\EditAction;
 use Filament\Actions\ViewAction;
 use Filament\Facades\Filament;
-use Filament\Tables\Columns\IconColumn;
 use Filament\Tables\Columns\TextColumn;
 use Filament\Tables\Filters\SelectFilter;
 use Filament\Tables\Table;
@@ -29,7 +28,7 @@ class TicketsTable
                     return;
                 }
 
-                if ($user->company?->is_main) {
+                if ($user->isFromMain()) {
                     return;
                 }
 
@@ -59,6 +58,7 @@ class TicketsTable
                     ->searchable(),
 
                 TextColumn::make('title')
+                    ->label('Title')
                     ->weight(fn(Model $record) => (method_exists($record, 'isNotOpened') && $record->isNotOpened()) ? 'bold' : 'medium')
                     ->searchable(query: function ($query, string $search) {
                         return $query->where(function ($q) use ($search) {
@@ -69,6 +69,10 @@ class TicketsTable
                     ->limit(40)
                     ->tooltip(fn(Ticket $record): string => $record->title),
 
+                TextColumn::make('form.name')
+                    ->label('Category')
+                    ->sortable(),
+
                 TextColumn::make('createdBy.name')
                     ->sortable(),
 
@@ -76,6 +80,9 @@ class TicketsTable
                     ->badge(),
 
                 TextColumn::make('company.name')
+                    ->visible(fn(): bool => $user->isFromMain())
+                    ->limit(16)
+                    ->tooltip(fn(Ticket $record): string => $record->company->name)
                     ->searchable(),
 
                 TextColumn::make('status.name')
@@ -98,8 +105,6 @@ class TicketsTable
                     )
                     ->html(),
 
-                IconColumn::make('to_main')
-                    ->boolean(),
                 TextColumn::make('created_at')
                     ->dateTime()
                     ->sortable()
@@ -109,6 +114,7 @@ class TicketsTable
             ->filters([
                 SelectFilter::make('company')
                     ->relationship('company', 'name')
+                    ->visible(fn(): bool => $user->isFromMain())
                     ->preload(),
 
                 SelectFilter::make('status')

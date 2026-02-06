@@ -553,7 +553,7 @@ class ViewTicket extends ViewRecord
     {
         $statusActions = [];
         if ($this->canChangeStatus()) {
-            foreach (TicketStatus::all() as $status) {
+            foreach (TicketStatus::where('is_active', true)->get() as $status) {
                 $statusActions[] = Action::make('status_' . $status->id)
                     ->label($status->name)
                     ->color(Color::hex($status->color))

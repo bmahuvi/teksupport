@@ -10,6 +10,7 @@ use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 use Illuminate\Foundation\Auth\User as Authenticatable;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Support\Str;
@@ -41,7 +42,17 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
         });
     }
 
-    public function UserLastLogins(): HasMany
+    public function isSuperAdmin(): bool
+    {
+        return $this->hasRole('super_admin');
+    }
+
+    public function latestLogin(): HasOne
+    {
+        return $this->hasOne(UserLastLogin::class)->latestOfMany();
+    }
+
+    public function logins(): HasMany
     {
         return $this->hasMany(UserLastLogin::class);
     }
@@ -54,6 +65,11 @@ class User extends Authenticatable implements FilamentUser, MustVerifyEmail
     public function company(): BelongsTo
     {
         return $this->belongsTo(Company::class);
+    }
+
+    public function isFromMain(): bool
+    {
+        return $this->company->is_main;
     }
 
     public function canAccessPanel(Panel $panel): bool

@@ -4,7 +4,7 @@ namespace App\Enums;
 
 enum NavigationGroups: string
 {
-    case ACCOUNT = 'Account';
-    case SETTINGS = 'Settings';
+    case ACCOUNT = 'Accounts';
+    case SETTINGS = 'System';
     case TICKETS = 'Tickets';
 }

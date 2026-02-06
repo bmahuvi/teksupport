@@ -17,6 +17,7 @@ return new class extends Migration {
             $table->string('color')->default('#84cc16');
             $table->boolean('is_default_for_new')->default(false);
             $table->boolean('is_closing_status')->default(false);
+            $table->boolean('is_active')->default(true);
             $table->integer('order_column')->default(0);
             $table->timestamps();
         });

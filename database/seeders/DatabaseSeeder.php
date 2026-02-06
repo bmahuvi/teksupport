@@ -22,6 +22,7 @@ class DatabaseSeeder extends Seeder
             FormSeeder::class,
             FormFieldSeeder::class,
             DemoDataSeeder::class,
+            SystemSettingSeeder::class,
         ]);
     }
 }

@@ -28,6 +28,11 @@ class Company extends Model
         return $this->belongsTo(District::class);
     }
 
+    public function isMain(): bool
+    {
+        return $this->is_main;
+    }
+
     public function creator(): BelongsTo
     {
         return $this->belongsTo(User::class, 'created_by');
@@ -37,6 +42,7 @@ class Company extends Model
     {
         return $this->hasMany(Ticket::class);
     }
+
 
     public function users(): HasMany
     {

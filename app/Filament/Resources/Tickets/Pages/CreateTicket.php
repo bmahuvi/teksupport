@@ -25,6 +25,7 @@ class CreateTicket extends CreateRecord
         $data['company_id'] = $user->company_id;
         $data['to_main'] = !$user->company?->is_main;
         $data['ticket_ulid'] = strtolower(Str::ulid());
+        $data['last_activity_at'] = now();
 
         foreach ($form->fields as $field) {
             $rules["custom_fields.{$field->name}"] = TicketForm::buildRulesForField($field);

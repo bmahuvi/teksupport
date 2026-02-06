@@ -2,44 +2,83 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
+use App\Filament\Resources\Users\Infolist\Sections\MainGrid;
+use App\Filament\Resources\Users\Infolist\Sections\UserDetailsSection;
+use App\Filament\Resources\Users\Infolist\Sections\UserSection;
 use Filament\Infolists\Components\TextEntry;
+use Filament\Schemas\Components\Grid;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class UserInfolist
 {
+
     public static function configure(Schema $schema): Schema
     {
         return $schema
             ->components([
-                TextEntry::make('name'),
-                TextEntry::make('roles')
-                    ->label('Roles')
-                    ->badge()
-                    ->formatStateUsing(fn($state, $record) => $record->roles->pluck('name')->join(', '))
-                    ->placeholder('-'),
-                TextEntry::make('gender')
-                    ->badge(),
-                TextEntry::make('email')
-                    ->label('Email address'),
-                TextEntry::make('phone')
-                    ->placeholder('-'),
-                TextEntry::make('email_verified_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('status')
-                    ->badge(),
-                TextEntry::make('login_attempts')
-                    ->numeric(),
-                TextEntry::make('company.name')
-                    ->label('Company')
-                    ->placeholder('-'),
-                TextEntry::make('ulid'),
-                TextEntry::make('created_at')
-                    ->dateTime()
-                    ->placeholder('-'),
-                TextEntry::make('updated_at')
-                    ->dateTime()
-                    ->placeholder('-'),
+                Section::make('User Details')
+                    ->description('Details about the user')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextEntry::make('name')
+                                    ->label('Name'),
+
+                                TextEntry::make('email')
+                                    ->label('Email address'),
+
+                                TextEntry::make('gender')
+                                    ->badge(),
+
+                                TextEntry::make('company.name')
+                                    ->label('Company'),
+
+
+                            ]),
+                    ])
+                    ->columnSpanFull(),
+
+                Section::make('Security')
+                    ->schema([
+                        Grid::make(3)
+                            ->schema([
+                                TextEntry::make('status')
+                                    ->badge()
+                                    ->formatStateUsing(function ($state) {
+                                        return match ($state) {
+                                            1 => 'Active',
+                                            2 => 'Blocked',
+                                            0 => 'Inactive',
+                                            default => 'Unknown',
+                                        };
+                                    })
+                                    ->color(function ($state) {
+                                        return match ($state) {
+                                            1 => 'success',
+                                            2 => 'danger',
+                                            0 => 'warning',
+                                            default => 'gray',
+                                        };
+                                    }),
+
+                                TextEntry::make('roles')
+                                    ->label('Roles')
+                                    ->badge()
+                                    ->formatStateUsing(fn($state, $record) => $record->roles->pluck('name')->join(', '))
+                                    ->placeholder('-'),
+
+                                TextEntry::make('latestLogin.created_at')
+                                    ->label('Latest Login')
+                                    ->placeholder('Never logged in')
+                                    ->since()
+                            ])
+                    ])
+                    ->columnSpanFull(),
+
+
             ]);
     }
+
+
 }

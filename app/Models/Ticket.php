@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Enums\TicketPriority;
 use App\Observers\TicketObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Casts\Attribute;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
@@ -55,11 +56,6 @@ class Ticket extends Model
         return $this->belongsTo(User::class, 'assigned_to');
     }
 
-    public function form(): BelongsTo
-    {
-        return $this->belongsTo(Form::class);
-    }
-
     public function markOpenedBy($userId): void
     {
         if ($userId == $this->user_id) {
@@ -101,5 +97,73 @@ class Ticket extends Model
             'custom_fields' => 'array',
             'last_activity_at' => 'datetime',
         ];
+    }
+
+    protected function title(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $form = $this->form()->with('fields')->first();
+
+                if (!$form || !$this->custom_fields) {
+                    return 'Ticket #' . $this->ticket_number;
+                }
+
+                $titleField = $form->fields->first(function ($field) {
+                    return in_array(strtolower($field->name), ['title', 'subject', 'issue_title', 'ticket_title']);
+                });
+
+                if ($titleField && isset($this->custom_fields[$titleField->name])) {
+                    return $this->custom_fields[$titleField->name];
+                }
+
+                $firstTextField = $form->fields->first(function ($field) {
+                    return in_array($field->type, ['text', 'textarea']);
+                });
+
+                if ($firstTextField && isset($this->custom_fields[$firstTextField->name])) {
+                    $value = $this->custom_fields[$firstTextField->name];
+                    return is_string($value) ? substr(strip_tags($value), 0, 100) : 'Ticket #' . $this->ticket_number;
+                }
+
+                return 'Ticket #' . $this->ticket_number;
+            }
+        );
+    }
+
+    public function form(): BelongsTo
+    {
+        return $this->belongsTo(Form::class);
+    }
+
+    protected function content(): Attribute
+    {
+        return Attribute::make(
+            get: function () {
+                $form = $this->form()->with('fields')->first();
+
+                if (!$form || !$this->custom_fields) {
+                    return '';
+                }
+
+                $contentField = $form->fields->first(function ($field) {
+                    return in_array(strtolower($field->name), ['content', 'description', 'details', 'message', 'issue_description']);
+                });
+
+                if ($contentField && isset($this->custom_fields[$contentField->name])) {
+                    return $this->custom_fields[$contentField->name];
+                }
+
+                $firstTextareaField = $form->fields->first(function ($field) {
+                    return $field->type === 'textarea';
+                });
+
+                if ($firstTextareaField && isset($this->custom_fields[$firstTextareaField->name])) {
+                    return $this->custom_fields[$firstTextareaField->name];
+                }
+
+                return '';
+            }
+        );
     }
 }

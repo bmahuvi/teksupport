@@ -7,6 +7,7 @@ use App\Filament\Resources\Users\UserResource;
 use Filament\Actions\CreateAction;
 use Filament\Resources\Pages\ManageRelatedRecords;
 use Filament\Tables\Table;
+use Illuminate\Database\Eloquent\Model;
 
 class ManageUserCompany extends ManageRelatedRecords
 {
@@ -23,5 +24,10 @@ class ManageUserCompany extends ManageRelatedRecords
             ->headerActions([
                 CreateAction::make(),
             ]);
+    }
+
+    protected function canDelete(Model $record): bool
+    {
+        return false;
     }
 }

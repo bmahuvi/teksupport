@@ -35,14 +35,10 @@ class CompaniesTable
                 IconColumn::make('is_active')
                     ->boolean(),
 
-                IconColumn::make('is_main')
-                    ->boolean(),
+                TextColumn::make('users_count')
+                    ->label('Users'),
 
                 TextColumn::make('region.name')
-                    ->sortable()
-                    ->searchable(),
-
-                TextColumn::make('district.name')
                     ->sortable()
                     ->searchable(),
 

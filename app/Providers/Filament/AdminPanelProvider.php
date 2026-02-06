@@ -3,6 +3,7 @@
 namespace App\Providers\Filament;
 
 use App\Enums\NavigationGroups;
+use App\Filament\Auth\Pages\UserLogin;
 use BezhanSalleh\FilamentShield\FilamentShieldPlugin;
 use Filament\Enums\ThemeMode;
 use Filament\Http\Middleware\Authenticate;
@@ -15,6 +16,7 @@ use Filament\Pages\Enums\SubNavigationPosition;
 use Filament\Panel;
 use Filament\PanelProvider;
 use Filament\Support\Colors\Color;
+use Filament\Support\Icons\Heroicon;
 use Filament\Widgets\AccountWidget;
 use Filament\Widgets\FilamentInfoWidget;
 use Illuminate\Cookie\Middleware\AddQueuedCookiesToResponse;
@@ -32,7 +34,7 @@ class AdminPanelProvider extends PanelProvider
             ->default()
             ->id('admin')
             ->path('admin')
-            ->login()
+            ->login(UserLogin::class)
             ->topbar(true)
             ->authGuard('web')
             ->profile()
@@ -69,10 +71,17 @@ class AdminPanelProvider extends PanelProvider
             ->navigationGroups([
                 NavigationGroup::make()
                     ->label(NavigationGroups::TICKETS->value)
-                    ->collapsed(), NavigationGroup::make()
+                    ->icon(Heroicon::OutlinedTicket)
+                    ->collapsed(),
+
+                NavigationGroup::make()
                     ->label(NavigationGroups::ACCOUNT->value)
-                    ->collapsed(), NavigationGroup::make()
+                    ->icon(Heroicon::OutlinedUserGroup)
+                    ->collapsed(),
+
+                NavigationGroup::make()
                     ->label(NavigationGroups::SETTINGS->value)
+                    ->icon(Heroicon::OutlinedCog6Tooth)
                     ->collapsed(),
             ])
             ->middleware([

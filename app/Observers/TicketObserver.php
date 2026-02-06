@@ -12,6 +12,7 @@ use App\Events\TicketStatusChanged;
 use App\Models\Ticket;
 use App\Models\TicketStatus;
 use App\Models\User;
+use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
 
@@ -70,7 +71,7 @@ class TicketObserver
      */
     public function deleted(Ticket $ticket): void
     {
-        //
+        Storage::disk('private')->deleteDirectory('ticket-attachments/' . $ticket->id);
     }
 
 
@@ -109,10 +110,6 @@ class TicketObserver
             $ticket->priority = TicketPriority::LOW;
         }
 
-        if (empty($ticket->last_activity_at)) {
-            $ticket->last_activity_at = now();
-        }
-
         $ticket->is_opened = false;
         $ticket->opened_by = null;
         $ticket->opened_at = null;
@@ -122,7 +119,7 @@ class TicketObserver
     protected function generateTicketNumber(Ticket $ticket): string
     {
         $date = now()->format('ymd');
-        $random = strtoupper(Str::random(6));
+        $random = strtoupper(Str::random(4));
         $format = '{PREFIX}-{DATE}-{RAND}';
 
         $ticket_number = str_replace(['{PREFIX}', '{DATE}', '{RAND}'], [$ticket->form->initial, $date, $random], $format);

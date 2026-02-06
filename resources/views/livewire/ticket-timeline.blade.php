@@ -16,7 +16,7 @@
     @forelse($activities as $index => $activity)
         @php
             $isLast = $limit ? ($index === count($activities) - 1) : ($activities->hasMorePages() ? false : ($index === $activities->count() - 1));
-            $isReplyOrNote = str_contains($activity->description, 'Reply') || str_contains($activity->description, 'Internal note');
+            $isReplyOrNote = str_contains($activity->description, 'Reply');
             $description = $activity->description;
         @endphp
 
