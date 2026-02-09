@@ -38,5 +38,19 @@ class AppServiceProvider extends ServiceProvider
             'panels::auth.login.form.after',
             fn(): Factory|View|\Illuminate\View\View => view('filament.pages.user-login')
         );
+
+        $this->ensureStorageDirectoryExists();
+    }
+
+    protected function ensureStorageDirectoryExists(): void
+    {
+        $directory = storage_path('app/private/ticket-attachments');
+
+        if (!file_exists($directory)) {
+            mkdir($directory, 0755, true);
+        }
+
+        chmod($directory, 0755);
     }
 }
+

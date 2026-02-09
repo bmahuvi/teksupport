@@ -71,4 +71,5 @@ class ListTickets extends ListRecords
     {
         return TicketResource::getWidgets();
     }
+
 }
