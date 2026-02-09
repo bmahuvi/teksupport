@@ -10,11 +10,13 @@ use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\SoftDeletes;
 use Illuminate\Notifications\Notifiable;
+use Spatie\Activitylog\LogOptions;
+use Spatie\Activitylog\Traits\LogsActivity;
 
 #[ObservedBy(CompanyObserver::class)]
 class Company extends Model
 {
-    use SoftDeletes, Notifiable, HasFactory;
+    use SoftDeletes, Notifiable, HasFactory, LogsActivity;
 
     protected $guarded = ['id'];
 
@@ -49,11 +51,17 @@ class Company extends Model
         return $this->hasMany(User::class);
     }
 
+    public function getActivitylogOptions(): LogOptions
+    {
+        return LogOptions::defaults()
+            ->useLogName('Company')
+            ->logUnguarded();
+    }
+
     protected function casts(): array
     {
         return [
             'is_main' => 'boolean',
         ];
     }
-
 }

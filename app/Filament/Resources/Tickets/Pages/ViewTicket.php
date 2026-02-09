@@ -277,10 +277,17 @@ class ViewTicket extends ViewRecord
                     $formattedValue = $this->formatCustomFieldValue($value, $field);
                     $isHtml = in_array($field->type, ['textarea', 'rich_editor']);
 
-                    $entries[] = TextEntry::make("custom_field_{$field->name}")
-                        ->label($field->label)
-                        ->state($formattedValue)
-                        ->html($isHtml);
+                    if ($isHtml) {
+                        $entries[] = TextEntry::make("custom_field_{$field->name}")
+                            ->label($field->label)
+                            ->state($formattedValue)
+                            ->columnSpanFull()
+                            ->html(true);
+                    } else {
+                        $entries[] = TextEntry::make("custom_field_{$field->name}")
+                            ->label($field->label)
+                            ->state($formattedValue);
+                    }
                 }
             }
         }
@@ -290,7 +297,7 @@ class ViewTicket extends ViewRecord
 
     protected function formatCustomFieldValue($value, $field): string
     {
-        if ($field->type === 'checkbox' || $field->type === 'toggle') {
+        if ($this->isToggleOrCheckbox($field)) {
             return $value ? 'Yes' : 'No';
         }
 
@@ -311,6 +318,11 @@ class ViewTicket extends ViewRecord
         }
 
         return is_string($value) ? $value : json_encode($value);
+    }
+
+    protected function isToggleOrCheckbox($field): bool
+    {
+        return $field->type === 'checkbox' || $field->type === 'toggle';
     }
 
     protected function getLastActivityDescription($record): string

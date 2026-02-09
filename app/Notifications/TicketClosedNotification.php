@@ -2,24 +2,26 @@
 
 namespace App\Notifications;
 
-use App\Models\Company;
+use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CompanyCreatedNotification extends Notification implements ShouldQueue
+class TicketClosedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public Company $company;
+    public Ticket $ticket;
+    public string $oldStatus;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($company)
+    public function __construct($ticket, $oldStatus)
     {
-        $this->company = $company;
+        $this->ticket = $ticket;
+        $this->oldStatus = $oldStatus;
     }
 
     /**
@@ -38,16 +40,10 @@ class CompanyCreatedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Company Created Successfully')
-            ->greeting('Hello!')
-            ->line('Your company has been created successfully.')
-            ->line('Company Name: ' . $this->company->name)
-            ->line('Email: ' . $this->company->email)
-            ->line('Thank you for using our application!')
-            ->action('Login', url('/'))
-            ->salutation('Warm regards,')
-            ->line(config('app.name'));
-
+            ->line('The ticket was closed.')
+            ->line('Previous status was: ' . $this->oldStatus)
+            ->line('Ticket Number: ' . $this->ticket->ticket_number)
+            ->salutation('Warm regards,');
     }
 
     /**

@@ -111,8 +111,8 @@ return [
     */
 
     'from' => [
-        'address' => env('support@tektek.co.tz'),
-        'name' => env('MAIL_FROM_NAME', 'TekSupport'),
+        'address' => 'support@tektek.co.tz',
+        'name' => 'TekSupport',
     ],
 
 ];

@@ -20,32 +20,34 @@ class ListTickets extends ListRecords
     public function getTabs(): array
     {
         $user = Filament::auth()->user();
+        $ticketQuery = Ticket::query();
+        if (!$user->company?->is_main) {
+            $ticketQuery->where('company_id', $user->company_id);
+        }
 
-        $tabs = [
+        return [
             'all' => Tab::make('All')
-                ->modifyQueryUsing(fn(Builder $query) => $query->whereHas('status', fn(Builder $q) => $q->where('is_closing_status', false))
-                )
-                ->badge(Ticket::whereHas('status', fn($q) => $q->where('is_closing_status', false))->count())
+                ->badge($ticketQuery->whereHas('status', fn($q) => $q->where('is_closing_status', false))->count())
                 ->icon('heroicon-o-ticket'),
 
             'my_tickets' => Tab::make('My Tickets')
                 ->modifyQueryUsing(fn(Builder $query) => $query->where('created_by', $user->getKey())
                 )
-                ->badge(Ticket::where('created_by', $user->getKey())
+                ->badge($ticketQuery->where('created_by', $user->getKey())
                     ->count())
                 ->icon('heroicon-o-user'),
 
             'open' => Tab::make('Open')
                 ->modifyQueryUsing(fn(Builder $query) => $query->whereHas('status', fn(Builder $q) => $q->where('is_closing_status', false))
                 )
-                ->badge(Ticket::whereHas('status', fn($q) => $q->where('is_closing_status', false))->count())
+                ->badge($ticketQuery->whereHas('status', fn($q) => $q->where('is_closing_status', false))->count())
                 ->icon('heroicon-o-clock'),
 
             'unassigned' => Tab::make('Unassigned')
                 ->modifyQueryUsing(fn(Builder $query) => $query->whereNull('assigned_to')
                     ->whereHas('status', fn(Builder $q) => $q->where('is_closing_status', false))
                 )
-                ->badge(Ticket::whereNull('assigned_to')
+                ->badge($ticketQuery->whereNull('assigned_to')
                     ->whereHas('status', fn($q) => $q->where('is_closing_status', false))
                     ->count())
                 ->icon('heroicon-o-user-minus'),
@@ -53,20 +55,9 @@ class ListTickets extends ListRecords
             'closed' => Tab::make('Closed')
                 ->modifyQueryUsing(fn(Builder $query) => $query->whereHas('status', fn(Builder $q) => $q->where('is_closing_status', true))
                 )
-                ->badge(Ticket::whereHas('status', fn($q) => $q->where('is_closing_status', true))->count())
+                ->badge($ticketQuery->whereHas('status', fn($q) => $q->where('is_closing_status', true))->count())
                 ->icon('heroicon-o-check-circle'),
         ];
-
-//        TicketStatus::query()
-//            ->where('is_active', true)
-//            ->orderBy('order_column')
-//            ->get()
-//            ->each(function (TicketStatus $status) use (&$tabs) {
-//                $tabs[$status->slug ?? str($status->name)->slug()->toString()] = Tab::make($status->name)
-//                    ->query(fn($query) => $query->where('ticket_status_id', $status->id));
-//            });
-//
-        return $tabs;
     }
 
     protected function getHeaderActions(): array

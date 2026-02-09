@@ -2,24 +2,26 @@
 
 namespace App\Notifications;
 
-use App\Models\Company;
+use App\Models\Ticket;
 use Illuminate\Bus\Queueable;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 use Illuminate\Notifications\Notification;
 
-class CompanyCreatedNotification extends Notification implements ShouldQueue
+class TicketPriorityChangedNotification extends Notification implements ShouldQueue
 {
     use Queueable;
 
-    public Company $company;
+    public Ticket $ticket;
+    public string $oldPriority;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($company)
+    public function __construct($ticket, $oldPriority)
     {
-        $this->company = $company;
+        $this->ticket = $ticket;
+        $this->oldPriority = $oldPriority;
     }
 
     /**
@@ -38,16 +40,13 @@ class CompanyCreatedNotification extends Notification implements ShouldQueue
     public function toMail(object $notifiable): MailMessage
     {
         return (new MailMessage)
-            ->subject('Company Created Successfully')
-            ->greeting('Hello!')
-            ->line('Your company has been created successfully.')
-            ->line('Company Name: ' . $this->company->name)
-            ->line('Email: ' . $this->company->email)
+            ->line('Ticket priority changed.')
+            ->line('Previous priority: ' . $this->oldPriority)
+            ->line('New priority: ' . $this->ticket->priority->name)
             ->line('Thank you for using our application!')
             ->action('Login', url('/'))
             ->salutation('Warm regards,')
             ->line(config('app.name'));
-
     }
 
     /**

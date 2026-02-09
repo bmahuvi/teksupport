@@ -58,7 +58,7 @@ class Ticket extends Model
 
     public function markOpenedBy($userId): void
     {
-        if ($userId == $this->user_id) {
+        if ($userId == $this->created_by) {
             return;
         }
         if ($this->is_opened) {

@@ -12,6 +12,8 @@ use App\Events\TicketStatusChanged;
 use App\Models\Ticket;
 use App\Models\TicketStatus;
 use App\Models\User;
+use App\Notifications\TicketClosedNotification;
+use App\Notifications\TicketPriorityChangedNotification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -54,6 +56,8 @@ class TicketObserver
 
             if ($newStatus && $newStatus->is_closing_status) {
                 event(new TicketClosed($ticket, auth()->user()));
+
+                $ticket->createdBy->notify(new TicketClosedNotification($ticket, $oldStatus->name));
             }
         }
 
@@ -63,6 +67,7 @@ class TicketObserver
             $newPriority = $ticket->priority;
 
             event(new TicketPriorityChanged($ticket, $oldPriority, $newPriority, auth()->user()));
+            $ticket->createdBy->notify(new TicketPriorityChangedNotification($ticket, $oldPriority->value));
         }
     }
 
