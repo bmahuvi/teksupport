@@ -25,7 +25,7 @@ class TicketStatusResource extends Resource
 
     protected static ?string $label = 'Ticket Status';
 
-    protected static ?string $navigationLabel = 'Status';
+    protected static ?string $navigationLabel = 'Ticket Status';
 
     protected static string|UnitEnum|null $navigationGroup = NavigationGroups::TICKETS->value;
 
