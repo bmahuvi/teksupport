@@ -41,16 +41,6 @@ class ViewTicket extends ViewRecord
 
     public ?array $replyData = [];
 
-    public function mount(int|string $record): void
-    {
-        parent::mount($record);
-        $this->record->markOpenedBy(Filament::auth()->user()?->getKey());
-
-        $this->replyData = [
-            'content' => '',
-        ];
-    }
-
     public function infolist(Schema $schema): Schema
     {
         $canReply = Filament::auth()->user()->can('Reply:Ticket');
@@ -337,6 +327,16 @@ class ViewTicket extends ViewRecord
         $time = $lastActivity->created_at->format('M d, Y, H:i:s');
 
         return strtolower($description) . ' on ' . $time;
+    }
+
+    public function mount(int|string $record): void
+    {
+        parent::mount($record);
+        $this->record->markOpenedBy(Filament::auth()->user()?->getKey());
+
+        $this->replyData = [
+            'content' => '',
+        ];
     }
 
     public function submitReply(): void

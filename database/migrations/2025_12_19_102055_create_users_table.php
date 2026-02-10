@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('users', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('name');
             $table->enum('gender', ['Male', 'Female']);
             $table->string('email')->unique();
@@ -22,8 +22,8 @@ return new class extends Migration {
             $table->boolean('change_password')->default(false);
             $table->timestamp('last_password_change')->nullable();
             $table->smallInteger('login_attempts')->default(0);
-            $table->foreignId('company_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('created_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignUlid('company_id')->constrained()->cascadeOnDelete();
+            $table->foreignUlid('created_by')->nullable()->constrained('users')->nullOnDelete();
             $table->ulid()->unique();
             $table->rememberToken();
             $table->timestamps();
@@ -37,7 +37,7 @@ return new class extends Migration {
 
         Schema::create('sessions', function (Blueprint $table) {
             $table->string('id')->primary();
-            $table->foreignId('user_id')->nullable()->index();
+            $table->foreignUlid('user_id')->nullable()->index();
             $table->string('ip_address', 45)->nullable();
             $table->text('user_agent')->nullable();
             $table->longText('payload');

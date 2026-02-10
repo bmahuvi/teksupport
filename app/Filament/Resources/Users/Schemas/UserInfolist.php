@@ -2,9 +2,7 @@
 
 namespace App\Filament\Resources\Users\Schemas;
 
-use App\Filament\Resources\Users\Infolist\Sections\MainGrid;
-use App\Filament\Resources\Users\Infolist\Sections\UserDetailsSection;
-use App\Filament\Resources\Users\Infolist\Sections\UserSection;
+
 use Filament\Infolists\Components\TextEntry;
 use Filament\Schemas\Components\Grid;
 use Filament\Schemas\Components\Section;

@@ -11,7 +11,7 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::table('tickets', function (Blueprint $table) {
-            $table->foreignId('form_id')
+            $table->foreignUlid('form_id')
                 ->nullable()
                 ->after('opened_by')
                 ->constrained()

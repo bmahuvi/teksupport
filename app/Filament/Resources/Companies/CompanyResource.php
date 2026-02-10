@@ -28,8 +28,11 @@ class CompanyResource extends Resource
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedBuildingOffice;
 
     protected static ?string $recordTitleAttribute = 'name';
+
     protected static ?string $label = 'Company';
+
     protected static ?string $pluralLabel = 'Companies';
+    
     protected static ?int $navigationSort = 1;
 
     public static function form(Schema $schema): Schema

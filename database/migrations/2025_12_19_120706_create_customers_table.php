@@ -4,20 +4,19 @@ use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
 
-return new class extends Migration
-{
+return new class extends Migration {
     /**
      * Run the migrations.
      */
     public function up(): void
     {
         Schema::create('customers', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('name');
             $table->string('phone');
             $table->string('email');
             $table->string('company_name');
-            $table->enum('status',['New','Processed','Notified'])->default('New');
+            $table->enum('status', ['New', 'Processed', 'Notified'])->default('New');
             $table->timestamps();
         });
     }

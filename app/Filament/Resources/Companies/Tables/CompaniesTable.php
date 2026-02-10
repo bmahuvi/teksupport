@@ -8,7 +8,6 @@ use Filament\Actions\ActionGroup;
 use Filament\Actions\BulkActionGroup;
 use Filament\Actions\DeleteAction;
 use Filament\Actions\DeleteBulkAction;
-use Filament\Actions\EditAction;
 use Filament\Actions\ForceDeleteBulkAction;
 use Filament\Actions\RestoreBulkAction;
 use Filament\Tables\Columns\IconColumn;
@@ -61,8 +60,6 @@ class CompaniesTable
                 TrashedFilter::make(),
             ])
             ->recordActions([
-                EditAction::make()
-                    ->hiddenLabel(),
                 ActionGroup::make([
                     ActionGroup::make([
                         DeleteAction::make()
@@ -77,6 +74,7 @@ class CompaniesTable
                     ])->dropdown(false),
                 ])
             ])
+            ->defaultSort('created_at', 'desc')
             ->toolbarActions([
                 BulkActionGroup::make([
                     DeleteBulkAction::make(),

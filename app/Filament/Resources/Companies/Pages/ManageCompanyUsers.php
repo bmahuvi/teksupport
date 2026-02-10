@@ -24,7 +24,10 @@ class ManageCompanyUsers extends ManageRelatedRecords
     protected static string $resource = CompanyResource::class;
 
     protected static string $relationship = 'users';
+
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
+
+    protected static ?string $relatedResource = CompanyResource::class;
 
     public static function getNavigationBadge(): ?string
     {

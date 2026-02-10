@@ -11,12 +11,12 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('ticket_replies', function (Blueprint $table) {
-            $table->id();
-            $table->foreignId('ticket_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('user_id')->constrained()->cascadeOnDelete();
+            $table->ulid('id')->primary();
+            $table->foreignUlid('ticket_id')->constrained()->cascadeOnDelete();
+            $table->foreignUlid('user_id')->constrained()->cascadeOnDelete();
             $table->longText('content');
             $table->boolean('is_opened')->default(false);
-            $table->foreignId('opened_by')->nullable()->constrained('users')->nullOnDelete();
+            $table->foreignUlid('opened_by')->nullable()->constrained('users')->nullOnDelete();
             $table->timestamp('opened_at')->nullable();
             $table->timestamps();
         });

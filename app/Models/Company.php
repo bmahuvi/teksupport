@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Observers\CompanyObserver;
 use Illuminate\Database\Eloquent\Attributes\ObservedBy;
+use Illuminate\Database\Eloquent\Concerns\HasUlids;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
@@ -16,7 +17,7 @@ use Spatie\Activitylog\Traits\LogsActivity;
 #[ObservedBy(CompanyObserver::class)]
 class Company extends Model
 {
-    use SoftDeletes, Notifiable, HasFactory, LogsActivity;
+    use SoftDeletes, Notifiable, HasFactory, LogsActivity, HasUlids;
 
     protected $guarded = ['id'];
 

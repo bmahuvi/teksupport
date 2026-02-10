@@ -11,14 +11,14 @@ return new class extends Migration {
     public function up(): void
     {
         Schema::create('companies', function (Blueprint $table) {
-            $table->id();
+            $table->ulid('id')->primary();
             $table->string('name')->unique();
             $table->string('phone');
             $table->string('email')->nullable()->unique();
             $table->boolean('is_active')->default(false);
             $table->boolean('is_main')->default(false);
-            $table->foreignId('region_id')->nullable()->constrained()->nullOnDelete();
-            $table->foreignId('district_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUlid('region_id')->nullable()->constrained()->nullOnDelete();
+            $table->foreignUlid('district_id')->nullable()->constrained()->nullOnDelete();
             $table->ulid()->unique();
             $table->softDeletes();
             $table->timestamps();
