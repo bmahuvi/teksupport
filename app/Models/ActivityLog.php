@@ -3,9 +3,9 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Concerns\HasUlids;
-use Spatie\Permission\Models\Role as SpatieRole;
+use Spatie\Activitylog\Models\Activity as ActivityModel;
 
-class Role extends SpatieRole
+class ActivityLog extends ActivityModel
 {
     use HasUlids;
 }

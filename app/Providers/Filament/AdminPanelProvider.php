@@ -43,6 +43,7 @@ class AdminPanelProvider extends PanelProvider
             ->databaseNotifications()
             ->font('Inter')
             ->spa()
+            ->globalSearch(false)
             ->defaultThemeMode(ThemeMode::System)
             ->unsavedChangesAlerts(app()->environment('production'))
             ->subNavigationPosition(SubNavigationPosition::Top)

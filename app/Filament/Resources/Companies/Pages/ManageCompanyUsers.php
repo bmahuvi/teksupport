@@ -27,7 +27,7 @@ class ManageCompanyUsers extends ManageRelatedRecords
 
     protected static string|BackedEnum|null $navigationIcon = Heroicon::OutlinedUser;
 
-    protected static ?string $relatedResource = CompanyResource::class;
+    protected static ?string $relatedResource = UserResource::class;
 
     public static function getNavigationBadge(): ?string
     {

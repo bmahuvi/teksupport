@@ -13,13 +13,15 @@ class CompanyCreatedNotification extends Notification implements ShouldQueue
     use Queueable;
 
     public Company $company;
+    public string $viewCompanyUrl;
 
     /**
      * Create a new notification instance.
      */
-    public function __construct($company)
+    public function __construct($company, $viewCompanyUrl)
     {
         $this->company = $company;
+        $this->viewCompanyUrl = $viewCompanyUrl;
     }
 
     /**
@@ -44,7 +46,7 @@ class CompanyCreatedNotification extends Notification implements ShouldQueue
             ->line('Company Name: ' . $this->company->name)
             ->line('Email: ' . $this->company->email)
             ->line('Thank you for using our application!')
-            ->action('Login', url('/'))
+            ->action('Click to view company', url($this->viewCompanyUrl))
             ->salutation('Warm regards,')
             ->line(config('app.name'));
 

@@ -2,6 +2,7 @@
 
 namespace App\Observers;
 
+use App\Filament\Resources\Companies\CompanyResource;
 use App\Models\Company;
 use App\Notifications\CompanyActivatedNotification;
 use App\Notifications\CompanyCreatedNotification;
@@ -15,7 +16,9 @@ class CompanyObserver
     public function created(Company $company): void
     {
         if ($company->email) {
-            $company->notify(new CompanyCreatedNotification($company));
+            $url = CompanyResource::getUrl('view', ['record' => $company]);
+
+            $company->notify(new CompanyCreatedNotification($company, $url));
         }
     }
 

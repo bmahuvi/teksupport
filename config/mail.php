@@ -111,7 +111,7 @@ return [
     */
 
     'from' => [
-        'address' => 'support@tektek.co.tz',
+        'address' => 'demo@tektek.co.tz',
         'name' => 'TekSupport',
     ],
 
