@@ -41,7 +41,7 @@ class AdminPanelProvider extends PanelProvider
             ->passwordReset()
             ->emailVerification()
             ->databaseNotifications()
-            ->font('Inter')
+            ->font('Albert Sans')
             ->spa()
             ->globalSearch(false)
             ->defaultThemeMode(ThemeMode::System)

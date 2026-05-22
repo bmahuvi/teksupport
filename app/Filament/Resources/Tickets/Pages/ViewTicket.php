@@ -669,6 +669,7 @@ class ViewTicket extends ViewRecord
 
         $this->dispatch('$refresh');
 
+
     }
 
     protected function canChangePriority(): bool
