@@ -8,4 +8,9 @@ use Filament\Resources\Pages\CreateRecord;
 class CreateTicketStatus extends CreateRecord
 {
     protected static string $resource = TicketStatusResource::class;
+
+    public function canCreateAnother(): bool
+    {
+        return false;
+    }
 }

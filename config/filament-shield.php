@@ -180,7 +180,10 @@ return [
                 'changeStatus',
                 'changePriority',
                 'assign',
-                'reply'
+                'reply',
+                'approve',
+                'cancel',
+                'close'
             ],
             CompanyResource::class => [
                 // custom permission
@@ -244,7 +247,9 @@ return [
     |
     */
 
-    'custom_permissions' => [],
+    'custom_permissions' => [
+        'Approve:Ticket' => 'Approve Ticket',
+    ],
 
     /*
     |--------------------------------------------------------------------------

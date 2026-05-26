@@ -7,28 +7,28 @@ use Filament\Support\Contracts\HasLabel;
 
 enum TicketPriority: string implements HasColor, HasLabel
 {
-    case LOW = 'Low';
-    case MEDIUM = 'Medium';
-    case CRITICAL = 'Critical';
-    case HIGH = 'High';
+    case Low = 'low';
+    case Medium = 'medium';
+    case High = 'high';
+    case Critical = 'critical';
 
     public function getLabel(): ?string
     {
         return match ($this) {
-            self::LOW => 'Low',
-            self::MEDIUM => 'Medium',
-            self::CRITICAL => 'Critical',
-            self::HIGH => 'High',
+            self::Low => 'Low',
+            self::Medium => 'Medium',
+            self::High => 'High',
+            self::Critical => 'Critical',
         };
     }
 
     public function getColor(): string|array|null
     {
         return match ($this) {
-            self::LOW => 'info',
-            self::MEDIUM => 'primary',
-            self::CRITICAL => 'danger',
-            self::HIGH => 'warning',
+            self::Low => 'info',
+            self::Medium => 'primary',
+            self::High => 'warning',
+            self::Critical => 'danger',
         };
     }
 

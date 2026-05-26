@@ -18,7 +18,7 @@ class CreateTicket extends CreateRecord
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $user = Auth::user();
-        $form = Form::with('fields')->find($data['form_id']);
+        $form = Form::with('fields')->findOrFail($data['form_id']);
         $rules = [];
 
         $data['created_by'] = $user->id;
@@ -28,7 +28,13 @@ class CreateTicket extends CreateRecord
         $data['last_activity_at'] = now();
 
         foreach ($form->fields as $field) {
-            $rules["custom_fields.{$field->name}"] = TicketForm::buildRulesForField($field);
+            $fieldRules = TicketForm::buildRulesForField($field);
+
+            $rules["custom_fields.{$field->name}"] = $fieldRules;
+
+            if ($field->type === 'file_multiple') {
+                $rules["custom_fields.{$field->name}.*"] = ['string'];
+            }
         }
 
         validator($data, $rules)->validate();

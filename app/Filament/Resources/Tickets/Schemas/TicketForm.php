@@ -69,7 +69,7 @@ class TicketForm
                                 ->options(TicketPriority::class)
                                 ->enum(TicketPriority::class)
                                 ->required()
-                                ->default(TicketPriority::LOW),
+                                ->default(TicketPriority::Low),
 
                             Toggle::make('has_deadline')
                                 ->default(false)
@@ -362,7 +362,6 @@ class TicketForm
                 $rules[] = 'string';
                 break;
 
-            case 'file_multiple':
             case 'select_multiple':
                 $rules[] = 'array';
                 break;
@@ -377,8 +376,12 @@ class TicketForm
                 }
                 break;
 
+            case 'file_multiple':
+                $rules[] = 'array';
+                break;
+
             case 'file':
-                $rules[] = 'file';
+                $rules[] = 'string';
                 break;
 
         }

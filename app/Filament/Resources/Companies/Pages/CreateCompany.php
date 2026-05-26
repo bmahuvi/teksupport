@@ -10,6 +10,11 @@ class CreateCompany extends CreateRecord
 {
     protected static string $resource = CompanyResource::class;
 
+    public function canCreateAnother(): bool
+    {
+        return false;
+    }
+
     protected function mutateFormDataBeforeCreate(array $data): array
     {
         $data['created_by'] = auth()->id();

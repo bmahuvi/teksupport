@@ -2,9 +2,10 @@
 
 namespace App\Filament\Resources\Companies\Schemas;
 
-use App\Models\District;
-use Filament\Forms\Components\Select;
+use App\Filament\Components\DistrictComponent;
+use App\Filament\Components\RegionComponent;
 use Filament\Forms\Components\TextInput;
+use Filament\Schemas\Components\Section;
 use Filament\Schemas\Schema;
 
 class CompanyForm
@@ -13,39 +14,28 @@ class CompanyForm
     {
         return $schema
             ->components([
-                TextInput::make('name')
-                    ->required(),
+                Section::make()
+                    ->columnSpanFull()
+                    ->columns(3)
+                    ->schema([
+                        TextInput::make('name')
+                            ->required(),
 
-                TextInput::make('phone')
-                    ->maxLength(10)
-                    ->minLength(10)
-                    ->placeholder('07xxxxxxxx')
-                    ->tel()
-                    ->required(),
+                        TextInput::make('phone')
+                            ->maxLength(10)
+                            ->minLength(10)
+                            ->placeholder('07xxxxxxxx')
+                            ->tel()
+                            ->required(),
 
-                TextInput::make('email')
-                    ->label('Email address')
-                    ->email(),
+                        TextInput::make('email')
+                            ->label('Email')
+                            ->email(),
 
-                Select::make('region_id')
-                    ->relationship('region', 'name')
-                    ->live()
-                    ->required(),
+                        RegionComponent::make(),
 
-                Select::make('district_id')
-                    ->label('District')
-                    ->options(function (callable $get) {
-                        $regionId = $get('region_id');
-
-                        if (!$regionId) {
-                            return [];
-                        }
-                        return District::where('region_id', $regionId)
-                            ->pluck('name', 'id');
-                    })
-                    ->required()
-                    ->reactive()
-                    ->disabled(fn(callable $get) => !$get('region_id')),
+                        DistrictComponent::make(),
+                    ])
             ]);
     }
 }

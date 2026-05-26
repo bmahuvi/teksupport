@@ -1,5 +1,6 @@
 <?php
 
+use App\Enums\TicketPriority;
 use Illuminate\Database\Migrations\Migration;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Support\Facades\Schema;
@@ -16,7 +17,7 @@ return new class extends Migration {
             $table->string('ticket_number')->unique();
             $table->foreignUlid('created_by')->constrained('users')->cascadeOnDelete();
             $table->foreignUlid('assigned_to')->nullable()->constrained('users')->nullOnDelete();
-            $table->string('priority')->default('low');
+            $table->string('priority')->default(TicketPriority::Low);
             $table->json('custom_fields')->nullable();
             $table->foreignUlid('company_id')->constrained()->cascadeOnDelete();
             $table->foreignUlid('ticket_status_id')->constrained()->cascadeOnDelete();

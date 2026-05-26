@@ -10,7 +10,7 @@ class TicketDeleted
     use Dispatchable, SerializesModels;
 
     public function __construct(
-        public int    $ticketId,
+        public string $ticketId,
         public string $ticketUid,
         public mixed  $deletedBy
     )

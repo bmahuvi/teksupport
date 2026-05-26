@@ -565,13 +565,31 @@ class ViewTicket extends ViewRecord
     {
         $statusActions = [];
         if ($this->canChangeStatus()) {
-            foreach (TicketStatus::where('is_active', true)->get() as $status) {
-                $statusActions[] = Action::make('status_' . $status->id)
-                    ->label($status->name)
-                    ->color(Color::hex($status->color))
-                    ->visible(fn($record) => $record->ticket_status_id !== $status->id)
-                    ->action(fn() => $this->changeStatus($status->id));
-            }
+            $statusActions = [
+                Action::make('status_pending')
+                    ->label('Pending')
+                    ->color(Color::hex('#8b5cf6'))
+                    ->visible(fn($record) => $record->status->name !== 'Pending')
+                    ->action(fn() => $this->changeStatus('Pending')),
+
+                Action::make('status_approve')
+                    ->label('Approve')
+                    ->color(Color::hex('#10b981'))
+                    ->visible(fn($record) => $record->status->name !== 'Approved' && auth()->user()->can('Approve:Ticket'))
+                    ->action(fn() => $this->changeStatus('Approved')),
+
+                Action::make('status_cancel')
+                    ->label('Cancel')
+                    ->color(Color::hex('#dc3545'))
+                    ->visible(fn($record) => $record->status->name !== 'Cancelled' && auth()->user()->can('Cancel:Ticket'))
+                    ->action(fn() => $this->changeStatus('Cancelled')),
+
+                Action::make('status_close')
+                    ->label('Close')
+                    ->color(Color::hex('#dc3545'))
+                    ->visible(fn($record) => $record->status->name !== 'Closed' && auth()->user()->can('Close:Ticket'))
+                    ->action(fn() => $this->changeStatus('Closed')),
+            ];
         }
 
         $priorityActions = [];
@@ -653,7 +671,7 @@ class ViewTicket extends ViewRecord
         return Auth::user()->can('ChangeStatus:Ticket', $this->record);
     }
 
-    public function changeStatus($statusId): void
+    public function changeStatus($status): void
     {
         if (!$this->canChangeStatus()) {
             Notification::make()
@@ -663,13 +681,12 @@ class ViewTicket extends ViewRecord
                 ->send();
             return;
         }
-        $this->record->update(['ticket_status_id' => $statusId]);
+        $status_id = TicketStatus::where('name', $status)->first()->id;
+        $this->record->update(['ticket_status_id' => $status_id]);
 
         Notification::make()->title('Status updated.')->success()->send();
 
         $this->dispatch('$refresh');
-
-
     }
 
     protected function canChangePriority(): bool

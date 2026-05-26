@@ -3,17 +3,20 @@
 namespace App\Observers;
 
 use App\Enums\TicketPriority;
+use App\Events\TicketApproved;
 use App\Events\TicketAssigned;
 use App\Events\TicketClosed;
 use App\Events\TicketCreated;
 use App\Events\TicketDeleted;
 use App\Events\TicketPriorityChanged;
 use App\Events\TicketStatusChanged;
+use App\Filament\Resources\Tickets\TicketResource;
 use App\Models\Ticket;
 use App\Models\TicketStatus;
 use App\Models\User;
 use App\Notifications\TicketClosedNotification;
 use App\Notifications\TicketPriorityChangedNotification;
+use App\Notifications\TicketStatusChangedNotification;
 use Illuminate\Support\Facades\Storage;
 use Illuminate\Support\Str;
 
@@ -30,7 +33,10 @@ class TicketObserver
             'description' => 'Ticket was created',
         ]);
 
-        event(new TicketCreated($ticket, auth()->user()));
+        $url = TicketResource::getUrl('view', ['record' => $ticket]);
+
+        event(new TicketCreated($ticket, auth()->user(), $url));
+
     }
 
     /**
@@ -58,6 +64,12 @@ class TicketObserver
                 event(new TicketClosed($ticket, auth()->user()));
 
                 $ticket->createdBy->notify(new TicketClosedNotification($ticket, $oldStatus->name));
+            } elseif ($newStatus && $newStatus->name === 'Approved') {
+                $url = TicketResource::getUrl('view', ['record' => $ticket]);
+
+                event(new TicketApproved($ticket, auth()->user(), $url));
+            } else {
+                $ticket->createdBy->notify(new TicketStatusChangedNotification($ticket, $oldStatus->name, $newStatus->name));
             }
         }
 
@@ -112,7 +124,7 @@ class TicketObserver
         }
 
         if (empty($ticket->priority)) {
-            $ticket->priority = TicketPriority::LOW;
+            $ticket->priority = TicketPriority::Low;
         }
 
         $ticket->is_opened = false;

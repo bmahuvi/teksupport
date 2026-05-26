@@ -22,16 +22,19 @@ class CompaniesTable
         return $table
             ->columns([
                 TextColumn::make('name')
+                    ->sortable()
                     ->searchable(),
 
                 TextColumn::make('phone')
                     ->searchable(),
 
                 TextColumn::make('email')
-                    ->label('Email address')
+                    ->label('Email')
                     ->searchable(),
 
                 IconColumn::make('is_active')
+                    ->label('Active')
+                    ->sortable()
                     ->boolean(),
 
                 TextColumn::make('users_count')

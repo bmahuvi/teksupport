@@ -87,4 +87,19 @@ class TicketPolicy
         return $authUser->can('Reply:Ticket');
     }
 
+    public function approve(AuthUser $authUser, Ticket $ticket): bool
+    {
+        return $authUser->can('Approve:Ticket');
+    }
+
+    public function cancel(AuthUser $authUser, Ticket $ticket): bool
+    {
+        return $authUser->can('Cancel:Ticket');
+    }
+
+    public function close(AuthUser $authUser, Ticket $ticket): bool
+    {
+        return $authUser->can('Close:Ticket');
+    }
+
 }
